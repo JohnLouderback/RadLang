@@ -1,0 +1,121 @@
+{
+  "fileTypes": ["rad"],
+  "name": "rad",
+  "patterns": [
+    {
+      "include": "#function"
+    },
+    {
+      "include": "#typeLiteral"
+    },
+    {
+      "include": "#keyword"
+    },
+    {
+      "include": "#identifier"
+    },
+    {
+      "include": "#groupingAssociation"
+    },
+    {
+      "include": "#operator"
+    },
+    {
+      "include": "#literal"
+    },
+    {
+      "include": "#whitespace"
+    }
+  ],
+  "repository": {
+    "function": {
+      "patterns": [
+        {
+          "match": "\\b(fn)\\b\\s*(\\w+)\\s*\\(([^)]*)\\)\\s*(=>)?\\s*\\{",
+          "name": "keyword.control.rad"
+        }
+      ]
+    },
+    "groupingAssociation": {
+      "patterns": [
+        {
+          "match": "\\(",
+          "name": "punctuation.section.group.rad"
+        },
+        {
+          "match": "\\)",
+          "name": "punctuation.section.group.rad"
+        },
+        {
+          "match": "\\{",
+          "name": "punctuation.section.group.rad"
+        },
+        {
+          "match": "\\}",
+          "name": "punctuation.section.group.rad"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.object.rad"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.rad"
+        },
+        {
+          "match": ":",
+          "name": "punctuation.type.separator.rad"
+        }
+      ]
+    },
+    "identifier": {
+      "patterns": [
+        {
+          "match": "(\\b[a-zA-Z_][a-zA-Z0-9_-]*\\b)(?:\\s*)(?:\\()",
+          "name": "entity.name.function.rad"
+        }
+      ]
+    },
+    "keyword": {
+      "patterns": [
+        {
+          "match": "\\b(fn|void|unsigned|int|byte|i16|i32|i64|i128|float|f16|f32|f64|f80|f128|bool)\\b",
+          "name": "keyword.type.rad"
+        }
+      ]
+    },
+    "literal": {
+      "patterns": [
+        {
+          "match": "\\b\\d+\\b",
+          "name": "constant.numeric.rad"
+        }
+      ]
+    },
+    "operator": {
+      "patterns": [
+        {
+          "match": "=>",
+          "name": "keyword.operator.rad"
+        }
+      ]
+    },
+    "typeLiteral": {
+      "patterns": [
+        {
+          "match": ":(?:\\s*)(\\w+)",
+          "name": "storage.type.rad"
+        }
+      ]
+    },
+    "whitespace": {
+      "patterns": [
+        {
+          "match": "\\s+",
+          "name": "meta.whitespace.rad"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.rad"
+}

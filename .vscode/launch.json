@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "configurations": [
+      {
+          "name": "Debug ANTLR4 grammar",
+          "type": "antlr-debug",
+          "request": "launch",
+          "input": "RadLexer/test-input.rad",
+          "grammar": "RadLexer/Rad.g4",
+          "actionFile": "grammars/exampleActions.js",
+          "startRule": "start",
+          "printParseTree": true,
+          "visualParseTree": true,
+          "args": ["-encoding", "UTF8"]
+      }
+  ]
+}

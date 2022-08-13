@@ -1,0 +1,5 @@
+fn hello-world(x: unsigned int, y: int, z: int): int => {
+    return x - y / z;
+}
+
+out hello-world(10, 2, 5);

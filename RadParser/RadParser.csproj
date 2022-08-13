@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OneOf" Version="3.0.223" />
+    <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223" />
+  </ItemGroup>
+
+</Project>
