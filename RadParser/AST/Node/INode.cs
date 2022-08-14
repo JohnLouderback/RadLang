@@ -9,5 +9,7 @@ public interface INode {
   public int Column { get; }
   public int Width { get; }
   public ParserRuleContext CSTNode { get; }
-  IEnumerable<TAncestorType> GetAncestorsOfType<TAncestorType>() where TAncestorType : Node<INode>;
+  IEnumerable<TAncestorType> GetAncestorsOfType<TAncestorType>(bool checkSelf) where TAncestorType : class;
+  TAncestorType? GetFirstAncestorOfType<TAncestorType>(bool checkSelf) where TAncestorType : class;
+  IScope? GetParentScope();
 }

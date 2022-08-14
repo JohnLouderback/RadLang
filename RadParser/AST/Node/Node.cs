@@ -31,9 +31,12 @@ public abstract class Node<T> : INode {
     CSTNode = context;
   }
 
-
-  public IEnumerable<TAncestorType> GetAncestorsOfType<TAncestorType>() where TAncestorType : Node<INode> {
-    var ancestors = new List<TAncestorType>();
+  public TAncestorType? GetFirstAncestorOfType<TAncestorType>(bool checkSelf = false) where TAncestorType : class {
+    // If this node should check to see if itself is the type.
+    if (checkSelf && this is TAncestorType) {
+      return this as TAncestorType;
+    }
+    
     if (this is Module) {
       throw new Exception($"{nameof(Module)} cannot have ancestors.");
     }
@@ -44,15 +47,32 @@ public abstract class Node<T> : INode {
       );
     }
 
-    if (Parent is TAncestorType) {
-      ancestors.Add(Parent as TAncestorType);
-      return ancestors;
+    if (Parent is TAncestorType node) {
+      return node;
     }
 
-    if (Parent is not Module) {
-      return ancestors.Concat((Parent as Node<INode>)!.GetAncestorsOfType<TAncestorType>());
+    // If the parent is not "Module" (The root element), then keep looking. Otherwise, give up.
+    return Parent is not Module ? (Parent as INode)!.GetFirstAncestorOfType<TAncestorType>(true) : null;
+  }
+
+  public IEnumerable<TAncestorType> GetAncestorsOfType<TAncestorType>(bool checkSelf = false) where TAncestorType : class {
+    var ancestors = new List<TAncestorType>();
+
+    var ancestor = GetFirstAncestorOfType<TAncestorType>(checkSelf);
+
+    if (ancestor is INode node &&
+        node.Parent is not Module) {
+      return ancestors.Concat((Parent as Node<INode>)!.GetAncestorsOfType<TAncestorType>(true));
     }
 
     return ancestors;
+  }
+
+
+  public IScope? GetParentScope() {
+    if (this is Module or TopLevel) {
+      return null;
+    }
+    return GetFirstAncestorOfType<IScope>();
   }
 }

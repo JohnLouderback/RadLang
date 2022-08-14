@@ -2,7 +2,7 @@
 
 namespace RadParser.AST.Node; 
 
-public class Expression : Node<INode> {
+public abstract class Expression : Node<INode> {
   public Expression(ParserRuleContext context) : base(context) {
   }
 }

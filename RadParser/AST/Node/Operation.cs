@@ -2,7 +2,7 @@
 
 namespace RadParser.AST.Node; 
 
-public class Operation<T> : Expression {
+public abstract class Operation<T> : Expression {
   public bool CanDetermineResult { get; } = false;
   public T? Result { get; } = default;
 

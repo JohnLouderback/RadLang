@@ -22,7 +22,7 @@ public class ASTGenerator {
     // TODO  check the 2 objects have same type
 
     foreach (var  prop in astNodeType.GetProperties(BindingFlags.Public|BindingFlags.Instance|BindingFlags.FlattenHierarchy)) {
-      var hasComputedAttribute = Attribute.GetCustomAttribute(prop, typeof(ComputedAttribute)) as ComputedAttribute is not null;
+      var hasComputedAttribute = Attribute.GetCustomAttribute(prop, typeof(AncestoralAttribute)) as AncestoralAttribute is not null;
       var propIsParent = prop.Name == "Prop";
 
       // If this prop is computed, we'll avoid checking it for nodes since they may be circular.

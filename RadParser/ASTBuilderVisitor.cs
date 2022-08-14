@@ -89,8 +89,10 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   }
 
 
-  public override NodeCollection<Statement> VisitFunctionBody(Rad.FunctionBodyContext context) {
-    return VisitStatementGroup(context.statementGroup());
+  public override FunctionScope VisitFunctionBody(Rad.FunctionBodyContext context) {
+    return new FunctionScope(context) {
+      Children = (VisitStatementGroup(context.statementGroup()).Children)
+    };
   }
 
 
@@ -213,9 +215,18 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   }
 
 
-  public override NodeCollection<Statement> VisitStatementGroup(Rad.StatementGroupContext context) {
-    return new NodeCollection<Statement>(context) {
-      Children = context.definiteStatement().Select(statement => VisitDefiniteStatement(statement)).ToList()
+  public override NodeCollection<FunctionScopeStatement> VisitStatementGroup(Rad.StatementGroupContext context) {
+    var children = context.GetRuleContexts<ParserRuleContext>();
+    return new NodeCollection<FunctionScopeStatement>(context) {
+      Children = children.Select(child => {
+        OneOf<Statement, Declaration> node = child switch {
+          Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
+          Rad.DeclarationContext declCtx => VisitDeclaration(declCtx),
+          _ => throw new Exception($"Top-level statement was not of a known context type. Got: {child.GetType().Name}")
+        };
+  
+        return new FunctionScopeStatement(node);
+      }).ToList()
     };
   }
 
