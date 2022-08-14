@@ -15,4 +15,19 @@
     <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="BaseASTVisitor.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BaseASTVisitor.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="BaseASTVisitor.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BaseASTVisitor.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
