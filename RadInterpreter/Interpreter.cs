@@ -1,5 +1,8 @@
 ﻿using Antlr4.Runtime;
+using RadCompiler;
 using RadParser;
+using RadParser.AST.Node;
+using RadParser.Utils;
 
 namespace RadInterpreter;
 
@@ -17,14 +20,10 @@ public class Interpreter {
     // Create a token parser.
     var parser = new RadLexer.Rad(tokenStream);
 
-    try {
-      // Parse the tokens to generate the "Concrete Syntax Tree".
-      var cst = parser.startRule();
-      var ast = (new ASTGenerator()).GenerateASTFromCST(cst);
-      Console.WriteLine(ast);
-    }
-    catch (Exception e) {
-      Console.WriteLine(e);
-    }
+    // Parse the tokens to generate the "Concrete Syntax Tree".
+    var cst = parser.startRule();
+    var ast = (new ASTGenerator()).GenerateASTFromCST(cst);
+    new Compiler().Compile(ast);
+    
   }
 }

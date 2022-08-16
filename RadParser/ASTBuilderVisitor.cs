@@ -20,7 +20,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override Declaration VisitDeclaration(Rad.DeclarationContext context) {
-    if (context.functionDeclaration() is not null) return VisitFunctionDeclaration(context.functionDeclaration());
+    if (context.functionDeclaration() is not null) {
+      return VisitFunctionDeclaration(context.functionDeclaration());
+    }
 
     throw new Exception($"\"{context.GetFullText()}\" is an unknown declaration type.");
   }
@@ -31,7 +33,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
       LeadingKeyword = context.statementKeyword() is not null
                          ? VisitStatementKeyword(context.statementKeyword())
                          : null,
-      Expression = VisitExpression(context.expression()) as Expression
+      Expression = VisitExpression(context.expression())
     };
   }
 
@@ -63,12 +65,12 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
       else if (context.op == context.MINUS()?.Payload) {
         (operatorNode, operatorType) = (context.MINUS(), OperatorType.Minus);
       }
-      
+
       // If there is an operator and two operands, it's a binary expression.
       if (context.expression(0) is not null &&
           context.expression(1) is not null) {
         return new BinaryOperation(context) {
-          LeftOperand = VisitExpression(context.expression(0)),
+          LeftOperand  = VisitExpression(context.expression(0)),
           RightOperand = VisitExpression(context.expression(1)),
           Operator = new Operator(operatorNode) {
             Type = operatorType
@@ -83,7 +85,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
           Identifier = new Identifier(context.ID())
         }
       };
-    } 
+    }
 
     throw new Exception($"\"{context.GetFullText()}\" is not a known expression type.");
   }
@@ -91,25 +93,29 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override FunctionScope VisitFunctionBody(Rad.FunctionBodyContext context) {
     return new FunctionScope(context) {
-      Children = (VisitStatementGroup(context.statementGroup()).Children)
+      Children = VisitStatementGroup(context.statementGroup()).Children
     };
   }
 
 
   public override FunctionCallExpression VisitFunctionCall(Rad.FunctionCallContext context) {
     return new FunctionCallExpression(context) {
-      Reference = new Reference(context.ID()),
+      Reference = new Reference(context.ID()) {
+        Identifier = new Identifier(context.ID())
+      },
       Arguments = VisitOrderedTuple(context.orderedTuple())
     };
   }
 
 
-  public override FunctionDeclaration VisitFunctionDeclaration(Rad.FunctionDeclarationContext context) {
+  public override FunctionDeclaration VisitFunctionDeclaration(
+      Rad.FunctionDeclarationContext context
+    ) {
     return new FunctionDeclaration(context) {
       Identifier = new Identifier(context.ID()),
       Parameters = VisitNamedTypeTuple(context.namedTypeTuple()),
       ReturnType = VisitReturnTypeSpecifier(context.returnTypeSpecifier()),
-      Statements = VisitFunctionBody(context.functionBody())
+      Body       = VisitFunctionBody(context.functionBody())
     };
   }
 
@@ -125,40 +131,50 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override NamedTypeParameter VisitNamedParameter(Rad.NamedParameterContext context) {
     return new NamedTypeParameter(context) {
-      Identifier = new Identifier(context.ID()),
+      Identifier    = new Identifier(context.ID()),
       TypeReference = VisitTypeSpecifier(context.typeSpecifier())
     };
   }
 
 
-  public override NodeCollection<NamedTypeParameter> VisitNamedParameters(Rad.NamedParametersContext context) {
+  public override NodeCollection<NamedTypeParameter> VisitNamedParameters(
+      Rad.NamedParametersContext context
+    ) {
     return new NodeCollection<NamedTypeParameter>(context) {
       Children = context.namedParameter().Select(param => VisitNamedParameter(param)).ToList()
     };
   }
 
 
-  public override NodeCollection<NamedTypeParameter> VisitNamedTypeTuple(Rad.NamedTypeTupleContext context) {
+  public override NodeCollection<NamedTypeParameter> VisitNamedTypeTuple(
+      Rad.NamedTypeTupleContext context
+    ) {
     return VisitNamedParameters(context.namedParameters());
   }
 
 
   public override TypeReference VisitNumberType(Rad.NumberTypeContext context) {
     ITerminalNode tokenNode;
-    if (context.keyword == context.INT_KEYWORD().Payload)
+    if (context.keyword == context.INT_KEYWORD().Payload) {
       tokenNode = context.INT_KEYWORD();
-    else if (context.keyword == context.FLOAT_KEYWORD().Payload)
+    }
+    else if (context.keyword == context.FLOAT_KEYWORD().Payload) {
       tokenNode = context.FLOAT_KEYWORD();
-    else
+    }
+    else {
       throw new Exception($"Keyword \"{context.keyword.Text}\" is not a known numeric type.");
+    }
 
     var typeReference = new TypeReference(tokenNode) {
       Identifier = new TypeIdentifier(tokenNode)
     };
-    if (context.UNSIGNED() is not null)
-      typeReference.Identifier.Modifiers.Add(new Modifier(context.UNSIGNED()) {
-        Type = ModifierType.Unsigned
-      });
+    if (context.UNSIGNED() is not null) {
+      typeReference.Identifier.Modifiers.Add(
+          new Modifier(context.UNSIGNED()) {
+            Type = ModifierType.Unsigned
+          }
+        );
+    }
 
     return typeReference;
   }
@@ -188,14 +204,18 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   }
 
 
-  public override NodeCollection<PositionalParameter> VisitOrderedParameters(Rad.OrderedParametersContext context) {
+  public override NodeCollection<PositionalParameter> VisitOrderedParameters(
+      Rad.OrderedParametersContext context
+    ) {
     return new NodeCollection<PositionalParameter>(context) {
       Children = context.orderedParameter().Select(param => VisitOrderedParameter(param)).ToList()
     };
   }
 
 
-  public override NodeCollection<PositionalParameter> VisitOrderedTuple(Rad.OrderedTupleContext context) {
+  public override NodeCollection<PositionalParameter> VisitOrderedTuple(
+      Rad.OrderedTupleContext context
+    ) {
     return VisitOrderedParameters(context.orderedParameters());
   }
 
@@ -215,18 +235,28 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   }
 
 
-  public override NodeCollection<FunctionScopeStatement> VisitStatementGroup(Rad.StatementGroupContext context) {
+  public override NodeCollection<FunctionScopeStatement> VisitStatementGroup(
+      Rad.StatementGroupContext context
+    ) {
     var children = context.GetRuleContexts<ParserRuleContext>();
     return new NodeCollection<FunctionScopeStatement>(context) {
-      Children = children.Select(child => {
-        OneOf<Statement, Declaration> node = child switch {
-          Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
-          Rad.DeclarationContext declCtx => VisitDeclaration(declCtx),
-          _ => throw new Exception($"Top-level statement was not of a known context type. Got: {child.GetType().Name}")
-        };
-  
-        return new FunctionScopeStatement(node);
-      }).ToList()
+      Children = children.Select(
+            child => {
+              OneOf<Statement, Declaration> node = child switch {
+                Rad.DefiniteStatementContext statementCtx =>
+                  VisitDefiniteStatement(statementCtx),
+                Rad.DeclarationContext declCtx => VisitDeclaration(
+                    declCtx
+                  ),
+                _ => throw new Exception(
+                         $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                       )
+              };
+
+              return new FunctionScopeStatement(node);
+            }
+          )
+        .ToList()
     };
   }
 
@@ -249,15 +279,19 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override TopLevel VisitTopLevel(Rad.TopLevelContext context) {
     var children = context.GetRuleContexts<ParserRuleContext>();
-    var statements = children.Select(child => {
-      OneOf<Statement, Declaration> node = child switch {
-        Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
-        Rad.DeclarationContext declCtx => VisitDeclaration(declCtx),
-        _ => throw new Exception($"Top-level statement was not of a known context type. Got: {child.GetType().Name}")
-      };
+    var statements = children.Select(
+        child => {
+          OneOf<Statement, Declaration> node = child switch {
+            Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
+            Rad.DeclarationContext declCtx            => VisitDeclaration(declCtx),
+            _ => throw new Exception(
+                     $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                   )
+          };
 
-      return new FunctionScopeStatement(node);
-    });
+          return new FunctionScopeStatement(node);
+        }
+      );
 
     return new TopLevel(context) {
       AllStatements = statements.ToList()

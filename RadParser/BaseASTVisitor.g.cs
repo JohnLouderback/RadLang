@@ -9,6 +9,8 @@ public abstract class BaseASTVisitor<T> {
 
   public abstract T Visit(FunctionDeclaration node);
 
+  public abstract T Visit(FunctionScope node);
+
   public abstract T Visit(FunctionScopeStatement node);
 
   public abstract T Visit(LiteralExpression node);

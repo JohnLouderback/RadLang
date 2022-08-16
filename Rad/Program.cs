@@ -4,6 +4,10 @@ using Rad.Commands;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
+AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((object sender, UnhandledExceptionEventArgs e) => {
+  AnsiConsole.WriteException(e.ExceptionObject as Exception, ExceptionFormats.ShortenEverything);
+});
+
 var app = new CommandApp();
 
 app.Configure(config =>
