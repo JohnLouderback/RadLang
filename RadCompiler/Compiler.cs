@@ -1,14 +1,36 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using LLVMSharp.Interop;
 using RadCompiler.Utils;
 using RadParser.AST.Node;
 
 namespace RadCompiler;
 
+public class CompilerEventArgs {
+  public string Message { get; } // readonly
+  public string? Details { get; } // readonly
+
+
+  public CompilerEventArgs(string msg, string? details = null) {
+    Message = msg;
+    Details = details;
+  }
+}
+
 public class Compiler {
+  public delegate void CompilerEventHandler(object sender, CompilerEventArgs e);
+
   public delegate double D();
 
+  /// <summary>
+  ///   A reference to the top-level function of the module.
+  /// </summary>
   public static LLVMValueRef MainFunction { get; set; }
+
+  /// <summary>
+  ///   The `Status` event is used to send status updates to subscribers.
+  /// </summary>
+  public event CompilerEventHandler Status;
 
 
   public void Compile(Module ast) {
@@ -36,7 +58,13 @@ public class Compiler {
 
     var codeGenerator = new CodeGenASTVisitor(module, builder, context);
 
+    UpdateStatus("Starting code compilation.", DateTime.Now.ToLongTimeString());
+    var timer = Stopwatch.StartNew();
+
+    // Generate the code.
     codeGenerator.Visit(ast);
+
+    UpdateStatus("Code compilation finished.", $"Took {GenerateTimeSpanString(timer)}");
 
     if (!module.TryVerify(LLVMVerifierFailureAction.LLVMReturnStatusAction, out var str)) {
       throw new LLVMResult(LLVMResultType.Error, () => Console.WriteLine(str), module.Dump);
@@ -51,14 +79,44 @@ public class Compiler {
               typeof(D)
             );
 
-          // passManager.Run(MainFunction);
+          //passManager.Run(module);
+          timer.Restart();
+          UpdateStatus("Code execution started.", DateTime.Now.ToLongTimeString());
+          var exitCode = dFunc();
+          UpdateStatus("Code execution finished.", $"Took {GenerateTimeSpanString(timer)}");
+          Console.WriteLine($"Process finished with exit code {exitCode}.");
 
-          //            LLVM.DumpValue(anonymousFunction); // Dump the function for exposition purposes.
-          Console.WriteLine("Evaluated to " + dFunc());
+          engine.TargetMachine.TryEmitToFile(
+              module,
+              Path.Combine(Directory.GetCurrentDirectory(), "rad.o"),
+              LLVMCodeGenFileType.LLVMObjectFile,
+              out var str
+            );
         }
       );
 
     //throw new LLVMResult(LLVMResultType.Success, () => { module.Dump(); });
     var test = "''";
+  }
+
+
+  public void UpdateStatus(string msg, string? details = null) {
+    Status?.Invoke(
+        this,
+        new CompilerEventArgs(msg, details)
+      );
+  }
+
+
+  private static string GenerateTimeSpanString(Stopwatch timer) {
+    string totalTimeString;
+    if (timer.Elapsed.TotalMilliseconds > 1000) {
+      totalTimeString = $"{timer.Elapsed.TotalSeconds.ToString()} seconds";
+    }
+    else {
+      totalTimeString = $"{timer.Elapsed.TotalMilliseconds.ToString()} ms";
+    }
+
+    return totalTimeString;
   }
 }

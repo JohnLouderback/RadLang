@@ -49,6 +49,14 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
       };
     }
 
+    if (context.ID() is not null) {
+      return new ReferenceExpression(context) {
+        Reference = new Reference(context.ID()) {
+          Identifier = new Identifier(context.ID())
+        }
+      };
+    }
+
     // If this expression is an operation.
     if (context.op is not null) {
       (ITerminalNode? operatorNode, OperatorType operatorType) = (default, default);
@@ -109,8 +117,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override FunctionDeclaration VisitFunctionDeclaration(
-      Rad.FunctionDeclarationContext context
-    ) {
+    Rad.FunctionDeclarationContext context
+  ) {
     return new FunctionDeclaration(context) {
       Identifier = new Identifier(context.ID()),
       Parameters = VisitNamedTypeTuple(context.namedTypeTuple()),
@@ -138,8 +146,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override NodeCollection<NamedTypeParameter> VisitNamedParameters(
-      Rad.NamedParametersContext context
-    ) {
+    Rad.NamedParametersContext context
+  ) {
     return new NodeCollection<NamedTypeParameter>(context) {
       Children = context.namedParameter().Select(param => VisitNamedParameter(param)).ToList()
     };
@@ -147,8 +155,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override NodeCollection<NamedTypeParameter> VisitNamedTypeTuple(
-      Rad.NamedTypeTupleContext context
-    ) {
+    Rad.NamedTypeTupleContext context
+  ) {
     return VisitNamedParameters(context.namedParameters());
   }
 
@@ -205,8 +213,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override NodeCollection<PositionalParameter> VisitOrderedParameters(
-      Rad.OrderedParametersContext context
-    ) {
+    Rad.OrderedParametersContext context
+  ) {
     return new NodeCollection<PositionalParameter>(context) {
       Children = context.orderedParameter().Select(param => VisitOrderedParameter(param)).ToList()
     };
@@ -214,8 +222,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override NodeCollection<PositionalParameter> VisitOrderedTuple(
-      Rad.OrderedTupleContext context
-    ) {
+    Rad.OrderedTupleContext context
+  ) {
     return VisitOrderedParameters(context.orderedParameters());
   }
 
@@ -236,8 +244,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override NodeCollection<FunctionScopeStatement> VisitStatementGroup(
-      Rad.StatementGroupContext context
-    ) {
+    Rad.StatementGroupContext context
+  ) {
     var children = context.GetRuleContexts<ParserRuleContext>();
     return new NodeCollection<FunctionScopeStatement>(context) {
       Children = children.Select(

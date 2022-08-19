@@ -52,8 +52,7 @@ public class ASTGenerator {
       }
 
       if (isNodeList) {
-        var nodeList = prop.GetValue(ast) as IEnumerable<INode>;
-        if (nodeList is null) {
+        if (prop.GetValue(ast) is not IEnumerable<INode> nodeList) {
           throw new Exception(
               $"{nameof(nodeList)} could not converted to an {nameof(IEnumerable<INode>)} interface."
             );

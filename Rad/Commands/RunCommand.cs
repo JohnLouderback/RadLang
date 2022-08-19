@@ -9,12 +9,12 @@ public class RunCommand : Command<RunCommand.Settings> {
   public override int Execute(CommandContext context, Settings settings) {
     var path = new TextPath(Emoji.Replace(":page_facing_up: ") + settings.File)
       .LeafColor(Color.Blue)
-      .StemStyle(new Style(foreground: null, background: null, Decoration.Dim))
-      .RootStyle(new Style(foreground: null, background: null, Decoration.Dim))
-      .SeparatorStyle(new Style(foreground: null, background: null, Decoration.Dim));
+      .StemStyle(new Style(null, null, Decoration.Dim))
+      .RootStyle(new Style(null, null, Decoration.Dim))
+      .SeparatorStyle(new Style(null, null, Decoration.Dim));
 
     var panel = new Panel(path) {
-      Header = new PanelHeader(text: "Compiling File:", Justify.Left),
+      Header = new PanelHeader("Compiling File:", Justify.Left),
       Border = BoxBorder.Rounded,
       Expand = false
     };
@@ -25,13 +25,17 @@ public class RunCommand : Command<RunCommand.Settings> {
 
     AnsiConsole.Status()
       .Spinner(Spinner.Known.Arrow3)
-      .SpinnerStyle(Style.Parse("green bold"))
+      .SpinnerStyle(Style.Parse("green"))
       .Start(
-          status: "Running...",
+          "Running...",
           async ctx => {
             AnsiConsole.Write(panel);
             try {
-              new Interpreter().InterpretFile(settings.File);
+              var interpreter = new Interpreter();
+              interpreter.Status += (sender, args) => {
+                AnsiConsole.WriteLine(args.Message + " " + args.Details);
+              };
+              interpreter.InterpretFile(settings.File);
             }
             catch (Exception e) {
               if (e is LLVMResult result) {
@@ -94,7 +98,6 @@ public class RunCommand : Command<RunCommand.Settings> {
 
 
   public class Settings : CommandSettings {
-    [CommandArgument(position: 0, template: "[Name]")]
-    public string File { get; set; }
+    [CommandArgument(0, "[Name]")] public string File { get; set; }
   }
 }
