@@ -12,6 +12,14 @@
           "printParseTree": true,
           "visualParseTree": true,
           "args": ["-encoding", "UTF8"]
-      }
+      },
+      {
+        "name": "Test VS Code Extension",
+        "type": "extensionHost",
+        "request": "launch",
+        "args": [
+            "--extensionDevelopmentPath=${workspaceFolder}"
+        ]
+    }
   ]
 }

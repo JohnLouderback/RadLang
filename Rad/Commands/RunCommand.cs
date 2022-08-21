@@ -1,4 +1,5 @@
-﻿using RadCompiler.Utils;
+﻿using Rad.Utils;
+using RadCompiler.Utils;
 using RadInterpreter;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,6 +8,8 @@ namespace Rad.Commands;
 
 public class RunCommand : Command<RunCommand.Settings> {
   public override int Execute(CommandContext context, Settings settings) {
+    LogoPrinter.Print();
+
     var path = new TextPath(Emoji.Replace(":page_facing_up: ") + settings.File)
       .LeafColor(Color.Blue)
       .StemStyle(new Style(null, null, Decoration.Dim))

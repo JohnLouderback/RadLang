@@ -11,16 +11,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.44.1-preview.0.29" />
-    <PackageReference Include="Spectre.Console.Analyzer" Version="0.44.1-preview.0.29" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.44.1-preview.0.29" />
-    <PackageReference Include="Spectre.Console.Extensions.Progress" Version="1.0.0" />
-    <PackageReference Include="Spectre.Console.Extensions.Table" Version="1.0.0" />
-    <PackageReference Include="Spectre.Console.ImageSharp" Version="0.44.1-preview.0.29" />
+    <PackageReference Include="Spectre.Console" Version="0.44.1-preview.0.29"/>
+    <PackageReference Include="Spectre.Console.Analyzer" Version="0.44.1-preview.0.29"/>
+    <PackageReference Include="Spectre.Console.Cli" Version="0.44.1-preview.0.29"/>
+    <PackageReference Include="Spectre.Console.Extensions.Progress" Version="1.0.0"/>
+    <PackageReference Include="Spectre.Console.Extensions.Table" Version="1.0.0"/>
+    <PackageReference Include="Spectre.Console.ImageSharp" Version="0.44.1-preview.0.29"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj" />
+    <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj"/>
   </ItemGroup>
+
+  <Target Name="Copy Runtime DLLs" AfterTargets="Build">
+    <Message Text="Copying DLLs" Importance="High"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLibStatic.lib"
+          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+  </Target>
 
 </Project>

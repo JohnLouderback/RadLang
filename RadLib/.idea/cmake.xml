@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSharedSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug Unix" ENABLED="true" CONFIG_NAME="Debug" GENERATION_OPTIONS="-D BUILDING_DLL=1" />
+      <configuration PROFILE_NAME="Debug Windows x64" ENABLED="true" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio x64" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -D BUILDING_DLL=1" />
+    </configurations>
+  </component>
+</project>

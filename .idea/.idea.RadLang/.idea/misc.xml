@@ -36,4 +36,7 @@
       </list>
     </option>
   </component>
+  <component name="ExtraIconsSettingsProject">
+    <option name="ignoreWarnings" value="false" />
+  </component>
 </project>

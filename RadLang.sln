@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rad", "Rad\Rad.csproj", "{F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadCompiler", "RadCompiler\RadCompiler.csproj", "{98DCAB4F-C9A6-4436-BB43-1F38676079E5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RadLib", "RadLib\cmake-build-debug-windows-x64\RadLib.vcxproj", "{E851B314-32A8-347C-89F8-E84A25BE4CC0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RadLibStatic", "RadLib\cmake-build-debug-windows-x64\RadLibStatic.vcxproj", "{8F9C1081-1B82-3736-9657-935FC71F44DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,5 +37,13 @@ Global
 		{F1495892-6526-4540-BF72-41B2CC8B07E7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{98DCAB4F-C9A6-4436-BB43-1F38676079E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98DCAB4F-C9A6-4436-BB43-1F38676079E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E851B314-32A8-347C-89F8-E84A25BE4CC0}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E851B314-32A8-347C-89F8-E84A25BE4CC0}.Debug|Any CPU.Build.0 = Debug|x64
+		{E851B314-32A8-347C-89F8-E84A25BE4CC0}.Release|Any CPU.ActiveCfg = Release|x64
+		{E851B314-32A8-347C-89F8-E84A25BE4CC0}.Release|Any CPU.Build.0 = Release|x64
+		{8F9C1081-1B82-3736-9657-935FC71F44DA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{8F9C1081-1B82-3736-9657-935FC71F44DA}.Debug|Any CPU.Build.0 = Debug|x64
+		{8F9C1081-1B82-3736-9657-935FC71F44DA}.Release|Any CPU.ActiveCfg = Release|x64
+		{8F9C1081-1B82-3736-9657-935FC71F44DA}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 EndGlobal

@@ -73,13 +73,21 @@
         {
           "match": "(\\b[a-zA-Z_][a-zA-Z0-9_-]*\\b)(?:\\s*)(?:\\()",
           "name": "entity.name.function.rad"
+        },
+        {
+          "match": "(?:\\b[a-zA-Z_][a-zA-Z0-9_-]*\\b)(?:\\s*)(?:\\s*(\\b[a-zA-Z_][a-zA-Z0-9_-]*)\\b.*?\\))",
+          "name": "entity.name.variable.parameter"
+        },
+        {
+          "match": "(\\b[a-zA-Z_][a-zA-Z0-9_-]*\\b)",
+          "name": "entity.name.variable.rad"
         }
       ]
     },
     "keyword": {
       "patterns": [
         {
-          "match": "\\b(fn|void|unsigned|int|byte|i16|i32|i64|i128|float|f16|f32|f64|f80|f128|bool)\\b",
+          "match": "\\b(fn|void|unsigned|int|byte|i16|i32|i64|i128|float|f16|f32|f64|f80|f128|bool|out|return)\\b",
           "name": "keyword.type.rad"
         }
       ]

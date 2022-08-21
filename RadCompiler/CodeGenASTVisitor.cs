@@ -305,6 +305,12 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
     printf.FunctionCallConv = (uint)LLVMCallConv.LLVMCCallConv;
     printf.Linkage          = LLVMLinkage.LLVMExternalLinkage;
 
+    var hello = module.DeclareFunction(
+        "hello",
+        LLVMTypeRef.Void,
+        Array.Empty<LLVMTypeRef>()
+      );
+
     // Define main func.
     var @params = new LLVMTypeRef[0];
 
@@ -326,6 +332,13 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
       Visit(statement.Value as INode);
       builder.PositionAtEnd(functionBody);
     }
+
+    hello.Linkage = LLVMLinkage.LLVMExternalLinkage;
+
+    builder.BuildCall(
+        hello,
+        Array.Empty<LLVMValueRef>()
+      );
 
     //Visit(node.Body);
     // Create the return value.
