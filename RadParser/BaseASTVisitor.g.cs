@@ -5,6 +5,8 @@ namespace RadParser.AST.Node;
 public abstract class BaseASTVisitor<T> {
   public abstract T Visit(BinaryOperation node);
 
+  public abstract T Visit(DeclaratorKeyword node);
+
   public abstract T Visit(FunctionCallExpression node);
 
   public abstract T Visit(FunctionDeclaration node);
@@ -43,6 +45,9 @@ public abstract class BaseASTVisitor<T> {
 
   public abstract T Visit(Void node);
 
+  public abstract T Visit(Expression node);
+  public abstract T Visit(Declaration node);
+  public abstract T Visit(Literal node);
 
   public T Visit(INode node) {
     return Visit((dynamic)node);

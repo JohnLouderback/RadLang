@@ -23,39 +23,18 @@ public abstract class Node<T> : INode {
   public int Width { get; internal set; }
   public ParserRuleContext CSTNode { get; internal set; }
 
+
   public Node(ParserRuleContext context) {
-    Text = context.GetFullText();
-    Line = context.Start.Line;
-    Column = context.Start.Column;
-    Width = context.Stop.StopIndex;
+    Text    = context.GetFullText();
+    Line    = context.Start.Line;
+    Column  = context.Start.Column;
+    Width   = Text.Length;
     CSTNode = context;
   }
 
-  public TAncestorType? GetFirstAncestorOfType<TAncestorType>(bool checkSelf = false) where TAncestorType : class {
-    // If this node should check to see if itself is the type.
-    if (checkSelf && this is TAncestorType) {
-      return this as TAncestorType;
-    }
-    
-    if (this is Module) {
-      throw new Exception($"{nameof(Module)} cannot have ancestors.");
-    }
-    
-    if (Parent is null) {
-      throw new Exception(
-        $"{nameof(Parent)} is null for {this.GetType().Name} \"{Text}\". It's possible the AST is being accessed prior to full generation."
-      );
-    }
 
-    if (Parent is TAncestorType node) {
-      return node;
-    }
-
-    // If the parent is not "Module" (The root element), then keep looking. Otherwise, give up.
-    return Parent is not Module ? (Parent as INode)!.GetFirstAncestorOfType<TAncestorType>(true) : null;
-  }
-
-  public IEnumerable<TAncestorType> GetAncestorsOfType<TAncestorType>(bool checkSelf = false) where TAncestorType : class {
+  public IEnumerable<TAncestorType> GetAncestorsOfType
+    <TAncestorType>(bool checkSelf = false) where TAncestorType : class {
     var ancestors = new List<TAncestorType>();
 
     var ancestor = GetFirstAncestorOfType<TAncestorType>(checkSelf);
@@ -69,10 +48,37 @@ public abstract class Node<T> : INode {
   }
 
 
+  public TAncestorType? GetFirstAncestorOfType
+    <TAncestorType>(bool checkSelf = false) where TAncestorType : class {
+    // If this node should check to see if itself is the type.
+    if (checkSelf && this is TAncestorType) {
+      return this as TAncestorType;
+    }
+
+    if (this is Module) {
+      throw new Exception($"{nameof(Module)} cannot have ancestors.");
+    }
+
+    if (Parent is null) {
+      throw new Exception(
+          $"{nameof(Parent)} is null for {GetType().Name} \"{Text}\". It's possible the AST is being accessed prior to full generation."
+        );
+    }
+
+    if (Parent is TAncestorType node) {
+      return node;
+    }
+
+    // If the parent is not "Module" (The root element), then keep looking. Otherwise, give up.
+    return Parent is not Module ? Parent!.GetFirstAncestorOfType<TAncestorType>(true) : null;
+  }
+
+
   public IScope? GetParentScope() {
     if (this is Module or TopLevel) {
       return null;
     }
+
     return GetFirstAncestorOfType<IScope>();
   }
 }

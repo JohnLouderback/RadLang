@@ -1,5 +1,5 @@
 fn hello-world(x: unsigned int, y: int, z: int): int => {
-    return x - y * z;
+  return x - y * z;
 }
 
 out hello-world(20, 2, 5);

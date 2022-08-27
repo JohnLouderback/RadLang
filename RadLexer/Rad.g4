@@ -1,6 +1,6 @@
-﻿parser grammar Rad;
+parser grammar Rad;
 
-options { tokenVocab='RadLexer\\RadLexer'; }
+options { tokenVocab='RadLexer/RadLexer'; }
 
 // Top Level
 startRule: topLevel;
@@ -13,14 +13,14 @@ functionDeclaration: FN ID namedTypeTuple returnTypeSpecifier THEN functionBody;
 returnTypeSpecifier: typeSpecifier | voidSpecifier;
 typeSpecifier: COLON (numberType | ID);
 voidSpecifier: COLON VOID;
-functionBody: statementGroup; 
+functionBody: statementGroup;
 // Function Call
 functionCall: ID orderedTuple;
- 
+
 // Tuples
 // Named Tuples
 namedTypeTuple: LPAREN namedParameters RPAREN;
-namedParameters: namedParameter (COMMA namedParameter)*; 
+namedParameters: namedParameter (COMMA namedParameter)*;
 namedParameter: ID typeSpecifier;
 // Ordered Tuples
 orderedTuple: LPAREN orderedParameters RPAREN;

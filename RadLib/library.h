@@ -3,11 +3,7 @@
 #include "dll.c"
 
 extern "C" {
-  /**
-   * Test
-   */
   DLL_PUBLIC void hello();
 };
 
 #endif //RADLIB_LIBRARY_H
-h

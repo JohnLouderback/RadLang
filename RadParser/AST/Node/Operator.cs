@@ -13,15 +13,15 @@ public enum OperatorType {
 public class Operator : Node<INode> {
   public OperatorType Type { get; internal set; }
 
+  public Operator(ParserRuleContext context) : base(context) {}
 
-  public Operator(ParserRuleContext context) : base(context) {
-  }
-  
-  public Operator(ITerminalNode tokenNode) : base(tokenNode.Parent.RuleContext as ParserRuleContext) {
+
+  public Operator(ITerminalNode tokenNode) :
+    base(tokenNode.Parent.RuleContext as ParserRuleContext) {
     var token = tokenNode.Payload as IToken;
-    Text = tokenNode.GetText();
-    Line = token.Line;
+    Text   = tokenNode.GetText();
+    Line   = token.Line;
     Column = token.Column;
-    Width = token.StopIndex;
+    Width  = Text.Length;
   }
 }

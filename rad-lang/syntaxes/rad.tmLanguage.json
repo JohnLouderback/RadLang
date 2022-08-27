@@ -103,7 +103,7 @@
     "operator": {
       "patterns": [
         {
-          "match": "=>",
+          "match": "=>|\\*|-|\\+|\\\\",
           "name": "keyword.operator.rad"
         }
       ]

@@ -1,38 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RadParser\RadParser.csproj"/>
+    <ProjectReference Include="..\RadParser\RadParser.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="libLLVM" Version="14.0.0"/>
-    <PackageReference Include="LLVMSharp" Version="14.0.0-beta1"/>
+    <PackageReference Include="libLLVM" Version="14.0.0" />
+    <PackageReference Include="LLVMSharp" Version="14.0.0-beta1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CodeGen"/>
+    <Folder Include="CodeGen" />
   </ItemGroup>
 
   <Target Name="Copy Runtime DLLs" AfterTargets="Build">
-    <Message Text="Copying DLLs" Importance="High"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLib.so"
-          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLibStatic.a"
-          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLib.dll"
-          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLibStatic.lib"
-          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Message Text="Copying DLLs" Importance="High" />
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 
 </Project>

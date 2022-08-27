@@ -1,4 +1,4 @@
-﻿lexer grammar RadLexer;
+lexer grammar RadLexer;
 
 channels {
   WHITESPACE_CHANNEL,
@@ -15,7 +15,7 @@ FN: 'fn';
 VOID: 'void';
 UNSIGNED: 'unsigned';
 INT_KEYWORD: 'int' | 'byte' | 'i16' | 'i32' | 'i64' | 'i128';
-FLOAT_KEYWORD: 'float' | 'f16' | 'f32' | 'f64' | 'f80' | 'f128'; 
+FLOAT_KEYWORD: 'float' | 'f16' | 'f32' | 'f64' | 'f80' | 'f128';
 BOOL_KEYWORD: 'bool';
 
 // Statement keywords

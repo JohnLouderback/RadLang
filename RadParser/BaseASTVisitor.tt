@@ -17,7 +17,7 @@ public abstract class BaseASTVisitor<T> {
         // Ignore interfaces.
         if (fileName.StartsWith("I")) continue;
 
-            // If the type is generic "Node", discard that.
+        // If the type is generic "Node", discard that.
         if (fileName == "Node" ||
             fileName == "NodeCollection") continue;
 
@@ -45,7 +45,16 @@ public abstract class BaseASTVisitor<T> {
         WriteLine($"  public abstract T Visit({fileName} node);\n");
     }
 #>
+<#
+    /* Explicitly include any members that couldn't included through the above heuristic. */
+#>
+  public abstract T Visit(Expression node);
+  public abstract T Visit(Declaration node);
+  public abstract T Visit(Literal node);
 
+<#
+    /* The base visitor for double dispatch. */
+#>
   public T Visit(INode node) {
     return Visit((dynamic)node);
   }

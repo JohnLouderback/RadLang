@@ -2,12 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <ApplicationIcon>rad-icon.ico</ApplicationIcon>
+    <LangVersion>10</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,13 +26,20 @@
     <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj"/>
   </ItemGroup>
 
+  <PropertyGroup>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <RdXmlFile Include="RD.xml"/>
+  </ItemGroup>
+
   <Target Name="Copy Runtime DLLs" AfterTargets="Build">
     <Message Text="Copying DLLs" Importance="High"/>
     <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
     <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
     <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLibStatic.lib"
-          DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-debug-windows-x64\Debug\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
   </Target>
 
 </Project>

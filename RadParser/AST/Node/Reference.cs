@@ -12,6 +12,6 @@ public class Reference : Node<INode>, IReference<Identifier> {
     Text = tokenNode.GetText();
     Line = token.Line;
     Column = token.Column;
-    Width = token.StopIndex;
+    Width = Text.Length;
   }
 }

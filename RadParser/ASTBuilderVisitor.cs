@@ -120,6 +120,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
     Rad.FunctionDeclarationContext context
   ) {
     return new FunctionDeclaration(context) {
+      Keyword = new DeclaratorKeyword(context.FN()) {
+        Type = DeclaratorKeywordType.Function
+      },
       Identifier = new Identifier(context.ID()),
       Parameters = VisitNamedTypeTuple(context.namedTypeTuple()),
       ReturnType = VisitReturnTypeSpecifier(context.returnTypeSpecifier()),

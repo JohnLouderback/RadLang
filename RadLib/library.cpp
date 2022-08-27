@@ -3,8 +3,7 @@
 #include <iostream>
 
 extern "C" {
-DLL_PUBLIC void hello()
-{
+  DLL_PUBLIC void hello() {
     std::cout << "Hello, World!!!" << std::endl;
-}
+  }
 }

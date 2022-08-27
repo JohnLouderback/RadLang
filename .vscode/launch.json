@@ -7,19 +7,24 @@
           "request": "launch",
           "input": "RadLexer/test-input.rad",
           "grammar": "RadLexer/Rad.g4",
-          "actionFile": "grammars/exampleActions.js",
           "startRule": "start",
           "printParseTree": true,
           "visualParseTree": true,
           "args": ["-encoding", "UTF8"]
       },
       {
-        "name": "Test VS Code Extension",
+        "name": "Run Extension",
         "type": "extensionHost",
         "request": "launch",
-        "args": [
-            "--extensionDevelopmentPath=${workspaceFolder}"
-        ]
+        "args": ["--extensionDevelopmentPath=${workspaceFolder}/rad-lang"],
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+        "skipFiles": [
+            "<node_internals>/**",
+            "**/node_modules/**",
+            "**/Resources/app/out/vs/**"
+        ],
+        "sourceMaps": true,
+        "preLaunchTask": "${defaultBuildTask}"
     }
   ]
 }

@@ -1,0 +1,6 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish Rad to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
+    <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" runtime="win-x64" self_contained="true" target_folder="$PROJECT_DIR$/Rad/bin/Release/net7.0/win-x64/publish" target_framework="net7.0" trim_unused_assemblies="true" uuid_high="-1060218851483564736" uuid_low="-4651583228928653337" />
+    <method v="2" />
+  </configuration>
+</component>

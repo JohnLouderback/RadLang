@@ -112,6 +112,11 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
   }
 
 
+  public override LLVMBuilderRef Visit(DeclaratorKeyword node) {
+    throw new NotImplementedException();
+  }
+
+
   public override LLVMBuilderRef Visit(FunctionCallExpression node) {
     var function = module.GetNamedFunction(node.Reference.Identifier.Name);
 
@@ -377,6 +382,21 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
 
 
   public override LLVMBuilderRef Visit(Void node) {
+    throw new NotImplementedException();
+  }
+
+
+  public override LLVMBuilderRef Visit(Expression node) {
+    throw new NotImplementedException();
+  }
+
+
+  public override LLVMBuilderRef Visit(Declaration node) {
+    throw new NotImplementedException();
+  }
+
+
+  public override LLVMBuilderRef Visit(Literal node) {
     throw new NotImplementedException();
   }
 }

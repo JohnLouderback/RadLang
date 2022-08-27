@@ -1,9 +1,13 @@
-# Change Log
+<!-- https://keepachangelog.com/en/1.0.0/ -->
 
-All notable changes to the "rad-lang" extension will be documented in this file.
+## [0.0.1] - 2019-12-11
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Added
 
-## [Unreleased]
+- feature1
+- feature2
 
-- Initial release
+### Changed
+
+- changed item 1
+- changed item 2
