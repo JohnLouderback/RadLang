@@ -17,6 +17,7 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
   private readonly ILogger<TextDocumentHandler> logger;
   private readonly ILanguageServerConfiguration configuration;
   private readonly DocumentManager documentManager;
+  private readonly ILanguageServerFacade facade;
 
   private readonly DocumentSelector _documentSelector = new(
       DocumentFilter.ForLanguage("rad")
@@ -28,11 +29,13 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
   public TextDocumentHandler(
     ILogger<TextDocumentHandler> logger,
     DocumentManager documentManager,
-    ILanguageServerConfiguration configuration
+    ILanguageServerConfiguration configuration,
+    ILanguageServerFacade facade
   ) {
     this.logger          = logger;
     this.configuration   = configuration;
     this.documentManager = documentManager;
+    this.facade          = facade;
   }
 
 
@@ -46,13 +49,17 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
     CancellationToken token
   ) {
     var contentChanges = notification.ContentChanges.ToArray();
+    // If the content change is the full document.
     if (contentChanges.Length == 1 &&
         contentChanges[0].Range == null) {
       var change = contentChanges[0].Text;
 
+      // Check if the the document already exists.
       if (documentManager.Documents.TryGetValue(notification.TextDocument.Uri, out var document)) {
+        // If it does, update it.
         document.Update(change);
       }
+      // Otherwise, create a new document.
       else {
         documentManager.Documents.Add(
             notification.TextDocument.Uri,

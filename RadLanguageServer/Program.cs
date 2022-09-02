@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -10,10 +11,10 @@ using Serilog;
 MainAsync(args).Wait();
 
 static async Task MainAsync(string[] args) {
-  /*Debugger.Launch();
+  Debugger.Launch();
   while (!Debugger.IsAttached) {
     await Task.Delay(100);
-  }*/
+  }
 
   Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
@@ -39,6 +40,7 @@ static async Task MainAsync(string[] args) {
                     .SetMinimumLevel(LogLevel.Debug)
                 )
               .WithHandler<TextDocumentHandler>()
+              .WithHandler<HoverHandler>()
               .WithHandler<DidChangeWatchedFilesHandler>()
               .WithHandler<FoldingRangeHandler>()
               .WithHandler<MyWorkspaceSymbolsHandler>()

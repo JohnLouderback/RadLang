@@ -4,7 +4,10 @@ using RadParser.Utils;
 namespace RadParser.AST.Node;
 
 public abstract class Node<T> : INode {
+  /// <inheritdoc />
   public string Text { get; internal set; }
+
+  /// <inheritdoc />
   public INode Parent { get; set; }
 
   public List<T> Children { get; internal set; } = new();
@@ -18,9 +21,25 @@ public abstract class Node<T> : INode {
     }
   }
 
+  /// <inheritdoc />
   public int Line { get; internal set; }
+
+  /// <inheritdoc />
   public int Column { get; internal set; }
+
+  /// <inheritdoc />
   public int Width { get; internal set; }
+
+  /// <inheritdoc />
+  public string[] Lines => Text.Split('\n');
+
+  /// <inheritdoc />
+  public int EndLine => Line + Lines.Length - 1;
+
+  /// <inheritdoc />
+  public int EndColumn => Line == EndLine ? Column + Width : Lines[^1].Length;
+
+  /// <inheritdoc />
   public ParserRuleContext CSTNode { get; internal set; }
 
 
@@ -33,6 +52,7 @@ public abstract class Node<T> : INode {
   }
 
 
+  /// <inheritdoc />
   public IEnumerable<TAncestorType> GetAncestorsOfType
     <TAncestorType>(bool checkSelf = false) where TAncestorType : class {
     var ancestors = new List<TAncestorType>();
@@ -48,6 +68,7 @@ public abstract class Node<T> : INode {
   }
 
 
+  /// <inheritdoc />
   public TAncestorType? GetFirstAncestorOfType
     <TAncestorType>(bool checkSelf = false) where TAncestorType : class {
     // If this node should check to see if itself is the type.
@@ -74,6 +95,7 @@ public abstract class Node<T> : INode {
   }
 
 
+  /// <inheritdoc />
   public IScope? GetParentScope() {
     if (this is Module or TopLevel) {
       return null;

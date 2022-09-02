@@ -1,10 +1,7 @@
-﻿using Antlr4.Runtime;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
-using RadLexer;
-using RadParser;
 
 namespace RadLanguageServer;
 
@@ -94,32 +91,10 @@ public class SemanticTokensHandler : SemanticTokensHandlerBase {
     ITextDocumentIdentifierParams identifier,
     CancellationToken cancellationToken
   ) {
-    // you would normally get this from a common source that is managed by current open editor,
-    // current active editor, etc.
-    var content = documentManager.Documents[identifier.TextDocument.Uri];
-
-    // Get the input stream from the file content provided.
-    var inputStream = new AntlrInputStream(
-        content.Text
-      );
-
-    // Create a lexer based on the input stream.
-    var lexer = new RadLexer.RadLexer(inputStream);
-
-    // Tokenize the file and get the token stream from the lexer.
-    var tokenStream = new CommonTokenStream(lexer);
-
-    // Create a token parser.
-    var parser = new Rad(tokenStream);
-
-    // Parse the tokens to generate the "Concrete Syntax Tree".
-    var cst = parser.startRule();
-
-    // Get the AST.
-    var ast = new ASTGenerator().GenerateASTFromCST(cst);
-
+    // Get the stored document and visit its AST node to generate the tokens.
+    var content           = documentManager.Documents[identifier.TextDocument.Uri];
     var semanticTokenizer = new SemanticTokenASTVisitor(builder);
-    semanticTokenizer.Visit(ast);
+    semanticTokenizer.Visit(content.AST);
     semanticTokenizer.BuildTokens();
     Console.Write("");
   }
