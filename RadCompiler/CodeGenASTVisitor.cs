@@ -4,11 +4,10 @@ using RadCompiler.Utils;
 using RadParser;
 using RadParser.AST.Node;
 using RadParser.Utils;
-using Void = RadParser.AST.Node.Void;
 
 namespace RadCompiler;
 
-public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
+public class CodeGenASTVisitor : BaseASTVisitor {
   private readonly LLVMModuleRef module;
 
   private readonly LLVMBuilderRef builder;
@@ -28,7 +27,7 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
   }
 
 
-  public override LLVMBuilderRef Visit(BinaryOperation node) {
+  public override void Visit(BinaryOperation node) {
     // Get a value of some sort out of the operands.
     var GetValue = new Func<Value, object>(
         possibleValue => {
@@ -107,17 +106,10 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
             }
           )
       );
-
-    return builder;
   }
 
 
-  public override LLVMBuilderRef Visit(DeclaratorKeyword node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(FunctionCallExpression node) {
+  public override void Visit(FunctionCallExpression node) {
     var function = module.GetNamedFunction(node.Reference.Identifier.Name);
 
     if (function.Params.Length != node.Arguments.Count) {
@@ -144,12 +136,10 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
               )
           )
       );
-
-    return builder;
   }
 
 
-  public override LLVMBuilderRef Visit(FunctionDeclaration node) {
+  public override void Visit(FunctionDeclaration node) {
     var function = module.GetNamedFunction(node.Identifier.Name);
 
     // Function was not previously defined.
@@ -200,70 +190,10 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
           function.Dump
         );
     }
-
-    return builder;
   }
 
 
-  public override LLVMBuilderRef Visit(FunctionScope node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(FunctionScopeStatement node) {
-    if (node.Value is Statement or Declaration) Visit(node.Value as INode);
-
-    return builder;
-  }
-
-
-  public override LLVMBuilderRef Visit(LiteralExpression node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Modifier node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Module node) {
-    Visit(node.TopLevel);
-    return builder;
-  }
-
-
-  public override LLVMBuilderRef Visit(NamedTypeParameter node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(NumericLiteral node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(OperationalKeyword node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Operator node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(PositionalParameter node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(ReferenceExpression node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Statement node) {
+  public override void Visit(Statement node) {
     // Evaluate expressions
     switch (node.Expression) {
       case FunctionCallExpression expression:
@@ -293,12 +223,10 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
             )
         );
     }
-
-    return builder;
   }
 
 
-  public override LLVMBuilderRef Visit(TopLevel node) {
+  public override void Visit(TopLevel node) {
     // Define extern printf.
     var printf = module.DeclareFunction(
         "printf",
@@ -361,42 +289,5 @@ public class CodeGenASTVisitor : BaseASTVisitor<LLVMBuilderRef> {
     }
 
     Compiler.MainFunction = function;
-
-    return builder;
-  }
-
-
-  public override LLVMBuilderRef Visit(TypeIdentifier node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(TypeReference node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Value node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Void node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Expression node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Declaration node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override LLVMBuilderRef Visit(Literal node) {
-    throw new NotImplementedException();
   }
 }

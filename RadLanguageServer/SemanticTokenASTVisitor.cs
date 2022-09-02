@@ -7,7 +7,7 @@ using Void = RadParser.AST.Node.Void;
 
 namespace RadLanguageServer;
 
-public class SemanticTokenASTVisitor : BaseASTVisitor<object?> {
+public class SemanticTokenASTVisitor : BaseASTVisitor {
   private readonly List<(INode, SemanticTokenType, SemanticTokenModifier[])> tokens = new();
   public SemanticTokensBuilder TokensBuilder { get; }
 
@@ -46,31 +46,22 @@ public class SemanticTokenASTVisitor : BaseASTVisitor<object?> {
   }
 
 
-  public override object? Visit(BinaryOperation node) {
+  public override void Visit(BinaryOperation node) {
     Visit(node.LeftOperand);
     PushToken(node.Operator, SemanticTokenType.Operator);
     Visit(node.RightOperand);
-
-    return null;
   }
 
 
-  public override object? Visit(DeclaratorKeyword node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override object? Visit(FunctionCallExpression node) {
+  public override void Visit(FunctionCallExpression node) {
     PushToken(node.Reference.Identifier, SemanticTokenType.Function);
     foreach (var arg in node.Arguments) {
       Visit(arg);
     }
-
-    return null;
   }
 
 
-  public override object? Visit(FunctionDeclaration node) {
+  public override void Visit(FunctionDeclaration node) {
     PushToken(node.Keyword, SemanticTokenType.Keyword);
     PushToken(node.Identifier, SemanticTokenType.Function, SemanticTokenModifier.Declaration);
 
@@ -81,91 +72,37 @@ public class SemanticTokenASTVisitor : BaseASTVisitor<object?> {
     Visit(node.ReturnType);
 
     Visit(node.Body);
-
-    return null;
   }
 
 
-  public override object? Visit(FunctionScope node) {
-    foreach (var statement in node.AllStatements) {
-      Visit(statement);
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(FunctionScopeStatement node) {
-    switch (node) {
-      case { Value: Statement stmnt }:
-        Visit(stmnt);
-        break;
-      case { Value: Declaration declaration }:
-        Visit(declaration);
-        break;
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(LiteralExpression node) {
+  public override void Visit(LiteralExpression node) {
     Visit(node.Literal);
-
-    return null;
   }
 
 
-  public override object? Visit(Modifier node) {
+  public override void Visit(Modifier node) {
     PushToken(node, SemanticTokenType.Modifier);
-
-    return null;
   }
 
 
-  public override object? Visit(Module node) {
-    Visit(node.TopLevel);
-
-    return null;
-  }
-
-
-  public override object? Visit(NamedTypeParameter node) {
+  public override void Visit(NamedTypeParameter node) {
     PushToken(node.Identifier, SemanticTokenType.Parameter, SemanticTokenModifier.Declaration);
 
     Visit(node.TypeReference);
-
-    return null;
   }
 
 
-  public override object? Visit(NumericLiteral node) {
+  public override void Visit(NumericLiteral node) {
     PushToken(node, SemanticTokenType.Number);
-
-    return null;
   }
 
 
-  public override object? Visit(OperationalKeyword node) {
-    throw new NotImplementedException();
-  }
-
-
-  public override object? Visit(Operator node) {
+  public override void Visit(Operator node) {
     PushToken(node, SemanticTokenType.Operator);
-
-    return null;
   }
 
 
-  public override object? Visit(PositionalParameter node) {
-    Visit(node.Value);
-
-    return null;
-  }
-
-
-  public override object? Visit(ReferenceExpression node) {
+  public override void Visit(ReferenceExpression node) {
     var decl = node.Reference.GetDeclaration();
     // Set the token type based on the type of the declaration it references.
     switch (decl) {
@@ -176,12 +113,10 @@ public class SemanticTokenASTVisitor : BaseASTVisitor<object?> {
         PushToken(node, SemanticTokenType.Parameter);
         break;
     }
-
-    return null;
   }
 
 
-  public override object? Visit(Statement node) {
+  public override void Visit(Statement node) {
     if (node.LeadingKeyword is not null) {
       PushToken(node.LeadingKeyword, SemanticTokenType.Keyword);
     }
@@ -189,89 +124,21 @@ public class SemanticTokenASTVisitor : BaseASTVisitor<object?> {
     if (node.Expression is {} expr) {
       Visit(expr);
     }
-
-    return null;
   }
 
 
-  public override object? Visit(TopLevel node) {
-    foreach (var statement in node.AllStatements) {
-      Visit(statement);
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(TypeIdentifier node) {
+  public override void Visit(TypeIdentifier node) {
     PushToken(node, SemanticTokenType.Keyword);
-
-    return null;
   }
 
 
-  public override object? Visit(TypeReference node) {
+  public override void Visit(TypeReference node) {
     PushToken(node, SemanticTokenType.Keyword);
-
-    return null;
   }
 
 
-  public override object? Visit(Value node) {
-    switch (node.Value) {
-      case Literal literal:
-        Visit(literal);
-        break;
-      case Expression expr:
-        Visit(expr);
-        break;
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(Void node) {
+  public override void Visit(Void node) {
     PushToken(node, SemanticTokenType.Keyword);
-
-    return null;
-  }
-
-
-  public override object? Visit(Expression node) {
-    switch (node) {
-      case FunctionCallExpression funcExpr:
-        Visit(funcExpr);
-        break;
-      case BinaryOperation binOp:
-        Visit(binOp);
-        break;
-      case ReferenceExpression refExpr:
-        Visit(refExpr);
-        break;
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(Declaration node) {
-    if (node is FunctionDeclaration funcExpr) {
-      Visit(funcExpr);
-    }
-
-    return null;
-  }
-
-
-  public override object? Visit(Literal node) {
-    switch (node) {
-      case NumericLiteral numLiteral:
-        Visit(numLiteral);
-        break;
-    }
-
-    return null;
   }
 
 

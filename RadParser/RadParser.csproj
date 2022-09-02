@@ -17,17 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="BaseASTVisitor.tt">
+    <None Update="IBaseASTVisitor.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BaseASTVisitor.g.cs</LastGenOutput>
+      <LastGenOutput>IBaseASTVisitor.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="BaseASTVisitor.g.cs">
+    <Compile Update="IBaseASTVisitor.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BaseASTVisitor.tt</DependentUpon>
+      <DependentUpon>IBaseASTVisitor.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

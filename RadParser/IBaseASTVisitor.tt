@@ -7,7 +7,7 @@
 
 namespace RadParser.AST.Node;
 
-public abstract class BaseASTVisitor<T> {
+public interface IBaseASTVisitor {
 <#
     var path = "./AST/Node/";
     var files = Directory.GetFiles(path);
@@ -26,13 +26,13 @@ public abstract class BaseASTVisitor<T> {
 
         foreach (var line in File.ReadLines(Path.Combine(path, fileName + ".cs"))) {
             // Check if the class is abstract. We ignore those.
-            if (Regex.IsMatch(line, $@"abstract.*?class.*?{fileName}")) {
+            if (Regex.IsMatch(line, $@"abstract.*?class {fileName}")) {
                 isAbstract = true;
                 break;
             }
 
             // Check if the class is generic. We ignore those.
-            if (Regex.IsMatch(line, $@"class.*?{fileName}<")) {
+            if (Regex.IsMatch(line, $@"class {fileName}<")) {
                 isGeneric = true;
                 break;
             }
@@ -42,20 +42,22 @@ public abstract class BaseASTVisitor<T> {
             continue;
         }
 
-        WriteLine($"  public abstract T Visit({fileName} node);\n");
+        WriteLine($"  void Visit({fileName} node);\n");
     }
 #>
 <#
     /* Explicitly include any members that couldn't included through the above heuristic. */
 #>
-  public abstract T Visit(Expression node);
-  public abstract T Visit(Declaration node);
-  public abstract T Visit(Literal node);
+  void Visit(Expression node);
+  void Visit(Declaration node);
+  void Visit(Literal node);
+  void Visit(IReference<Identifier> node);
+  void Visit(Identifier node);
 
 <#
     /* The base visitor for double dispatch. */
 #>
-  public T Visit(INode node) {
-    return Visit((dynamic)node);
+  public void Visit(INode node) {
+    Visit((dynamic)node);
   }
 }
