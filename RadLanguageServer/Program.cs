@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Server;
 using RadLanguageServer;
 using Serilog;
@@ -59,7 +60,13 @@ static async Task MainAsync(string[] args) {
                             return new Foo(logger);
                           }
                         )
-                      .AddSingleton(new DocumentManager());
+                      .AddSingleton(new DocumentManagerService())
+                      .AddSingleton(
+                          provider => new DiagnosticsService(
+                              provider.GetService<ILanguageServerFacade>(),
+                              provider.GetService<DocumentManagerService>()
+                            )
+                        );
                   }
                 )
               .OnInitialize(

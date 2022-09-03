@@ -16,8 +16,9 @@ namespace RadLanguageServer;
 internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
   private readonly ILogger<TextDocumentHandler> logger;
   private readonly ILanguageServerConfiguration configuration;
-  private readonly DocumentManager documentManager;
+  private readonly DocumentManagerService documentManagerService;
   private readonly ILanguageServerFacade facade;
+  private readonly DiagnosticsService diagnosticsService;
 
   private readonly DocumentSelector _documentSelector = new(
       DocumentFilter.ForLanguage("rad")
@@ -28,14 +29,16 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
 
   public TextDocumentHandler(
     ILogger<TextDocumentHandler> logger,
-    DocumentManager documentManager,
+    DocumentManagerService documentManagerService,
+    DiagnosticsService diagnosticsService,
     ILanguageServerConfiguration configuration,
     ILanguageServerFacade facade
   ) {
-    this.logger          = logger;
-    this.configuration   = configuration;
-    this.documentManager = documentManager;
-    this.facade          = facade;
+    this.logger                 = logger;
+    this.configuration          = configuration;
+    this.documentManagerService = documentManagerService;
+    this.facade                 = facade;
+    this.diagnosticsService     = diagnosticsService;
   }
 
 
@@ -55,19 +58,28 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
       var change = contentChanges[0].Text;
 
       // Check if the the document already exists.
-      if (documentManager.Documents.TryGetValue(notification.TextDocument.Uri, out var document)) {
+      if (documentManagerService.Documents.TryGetValue(
+              notification.TextDocument.Uri,
+              out var document
+            )) {
         // If it does, update it.
         document.Update(change);
       }
       // Otherwise, create a new document.
       else {
-        documentManager.Documents.Add(
+        documentManagerService.Documents.Add(
             notification.TextDocument.Uri,
             new DocumentContent
               (change)
           );
       }
     }
+
+    Task.Yield();
+
+    // Diagnostic service must be called _after_ the document is added or updated in the document
+    // manager.
+    diagnosticsService.PublishDiagnostics(notification.TextDocument);
 
     return Unit.Task;
   }
@@ -77,12 +89,16 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
     DidOpenTextDocumentParams notification,
     CancellationToken token
   ) {
-    //Task.Yield();
-    documentManager.Documents.Add(
+    documentManagerService.Documents.Add(
         notification.TextDocument.Uri,
         new DocumentContent
           (notification.TextDocument.Text)
       );
+
+    Task.Yield();
+
+    // Diagnostic service must be called _after_ the document is added to the document manager.
+    diagnosticsService.PublishDiagnostics(notification.TextDocument);
     return Unit.Value;
   }
 
@@ -91,7 +107,7 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
     DidCloseTextDocumentParams notification,
     CancellationToken token
   ) {
-    documentManager.Documents.Remove(notification.TextDocument.Uri);
+    documentManagerService.Documents.Remove(notification.TextDocument.Uri);
 
     return Unit.Task;
   }
@@ -118,11 +134,11 @@ internal class TextDocumentHandler : TextDocumentSyncHandlerBase {
 }
 
 internal class MyDocumentSymbolHandler : IDocumentSymbolHandler {
-  private readonly DocumentManager documentManager;
+  private readonly DocumentManagerService documentManagerService;
 
 
-  public MyDocumentSymbolHandler(DocumentManager documentManager) {
-    this.documentManager = documentManager;
+  public MyDocumentSymbolHandler(DocumentManagerService documentManagerService) {
+    this.documentManagerService = documentManagerService;
   }
 
 
@@ -141,7 +157,7 @@ internal class MyDocumentSymbolHandler : IDocumentSymbolHandler {
     CancellationToken cancellationToken
   ) {
     // you would normally get this from a common source that is managed by current open editor, current active editor, etc.
-    var content = documentManager.Documents[request.TextDocument.Uri].Text;
+    var content = documentManagerService.Documents[request.TextDocument.Uri].Text;
     var lines   = content.Split('\n');
     var symbols = new List<SymbolInformationOrDocumentSymbol>();
     for (var lineIndex = 0; lineIndex < lines.Length; lineIndex++) {

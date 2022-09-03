@@ -10,15 +10,15 @@ namespace RadLanguageServer;
 
 public class HoverHandler : HoverHandlerBase {
   private readonly ILogger<HoverHandler> logger;
-  private readonly DocumentManager documentManager;
+  private readonly DocumentManagerService documentManagerService;
 
 
   public HoverHandler(
     ILogger<HoverHandler> logger,
-    DocumentManager documentManager
+    DocumentManagerService documentManagerService
   ) {
-    this.logger          = logger;
-    this.documentManager = documentManager;
+    this.logger                 = logger;
+    this.documentManagerService = documentManagerService;
   }
 
 
@@ -26,7 +26,7 @@ public class HoverHandler : HoverHandlerBase {
     HoverParams request,
     CancellationToken cancellationToken
   ) {
-    var content = documentManager.Documents[request.TextDocument.Uri];
+    var content = documentManagerService.Documents[request.TextDocument.Uri];
     var cursorPosition = new Cursor {
       Line   = (uint)request.Position.Line + 1,
       Column = (uint)request.Position.Character + 1
@@ -35,7 +35,9 @@ public class HoverHandler : HoverHandlerBase {
     var node = ASTUtils.MostSpecificNodeAtCursorPosition(content.AST, cursorPosition);
 
     if (node is IDocumented documented) {}
-    else return null;
+    else {
+      return null;
+    }
 
     var hoverDebugString =
       $"* Line: {request.Position.Line + 1}\n* Col: {request.Position.Character + 1}\n\n```rad\n{node.Text}\n```";
@@ -44,7 +46,7 @@ public class HoverHandler : HoverHandlerBase {
     return new Hover {
       Contents = new MarkedStringsOrMarkupContent(
           new MarkupContent {
-            Kind = MarkupKind.Markdown,
+            Kind  = MarkupKind.Markdown,
             Value = documented.Documentation.Markdown
           }
         )

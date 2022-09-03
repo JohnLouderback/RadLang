@@ -19,6 +19,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RadLibStatic", "RadLib\cmak
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadLanguageServer", "RadLanguageServer\RadLanguageServer.csproj", "{369B4A77-E00D-4AF0-A8F5-756934823B86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadTypeChecker", "RadTypeChecker\RadTypeChecker.csproj", "{C197DF04-B74B-4614-BFDA-3A3A12661009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadDiagnostics", "RadDiagnostics\RadDiagnostics.csproj", "{DE912665-560C-427C-AFC7-43ECC4076060}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadUtils", "RadUtils\RadUtils.csproj", "{70A69DE9-418B-4372-A908-7CA36D615A76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +64,18 @@ Global
 		{369B4A77-E00D-4AF0-A8F5-756934823B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{369B4A77-E00D-4AF0-A8F5-756934823B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{369B4A77-E00D-4AF0-A8F5-756934823B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C197DF04-B74B-4614-BFDA-3A3A12661009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C197DF04-B74B-4614-BFDA-3A3A12661009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C197DF04-B74B-4614-BFDA-3A3A12661009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C197DF04-B74B-4614-BFDA-3A3A12661009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE912665-560C-427C-AFC7-43ECC4076060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE912665-560C-427C-AFC7-43ECC4076060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE912665-560C-427C-AFC7-43ECC4076060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE912665-560C-427C-AFC7-43ECC4076060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A69DE9-418B-4372-A908-7CA36D615A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A69DE9-418B-4372-A908-7CA36D615A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A69DE9-418B-4372-A908-7CA36D615A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A69DE9-418B-4372-A908-7CA36D615A76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

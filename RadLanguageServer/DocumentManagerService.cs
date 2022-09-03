@@ -2,6 +2,6 @@
 
 namespace RadLanguageServer;
 
-public class DocumentManager {
+public class DocumentManagerService {
   public Dictionary<DocumentUri, DocumentContent> Documents { get; } = new();
 }

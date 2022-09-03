@@ -7,15 +7,15 @@ namespace RadLanguageServer;
 
 public class SemanticTokensHandler : SemanticTokensHandlerBase {
   private readonly ILogger logger;
-  private readonly DocumentManager documentManager;
+  private readonly DocumentManagerService documentManagerService;
 
 
   public SemanticTokensHandler(
     ILogger<SemanticTokensHandler> logger,
-    DocumentManager documentManager
+    DocumentManagerService documentManagerService
   ) {
-    this.logger          = logger;
-    this.documentManager = documentManager;
+    this.logger                 = logger;
+    this.documentManagerService = documentManagerService;
   }
 
 
@@ -92,7 +92,7 @@ public class SemanticTokensHandler : SemanticTokensHandlerBase {
     CancellationToken cancellationToken
   ) {
     // Get the stored document and visit its AST node to generate the tokens.
-    var content           = documentManager.Documents[identifier.TextDocument.Uri];
+    var content           = documentManagerService.Documents[identifier.TextDocument.Uri];
     var semanticTokenizer = new SemanticTokenASTVisitor(builder);
     semanticTokenizer.Visit(content.AST);
     semanticTokenizer.BuildTokens();

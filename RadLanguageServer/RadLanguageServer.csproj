@@ -20,7 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RadDiagnostics\RadDiagnostics.csproj" />
     <ProjectReference Include="..\RadParser\RadParser.csproj" />
+    <ProjectReference Include="..\RadTypeChecker\RadTypeChecker.csproj" />
+    <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
   </ItemGroup>
 
 </Project>
