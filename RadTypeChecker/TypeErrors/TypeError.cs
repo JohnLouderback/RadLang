@@ -1,6 +1,7 @@
 ﻿using RadDiagnostics;
 using RadParser.AST.Node;
 using RadUtils;
+using RadUtils.Constructs;
 
 namespace RadTypeChecker.TypeErrors;
 
@@ -11,7 +12,9 @@ public abstract class TypeError<T> : ITypeError, ITypeErrorForNode<T> where T : 
   /// <inheritdoc />
   public virtual T ForNode { get; }
 
-  /// <inheritdoc />
+  /// <summary>
+  ///   The message explaining the cause of the error.
+  /// </summary>
   public virtual string Message { get; }
 
   /// <inheritdoc />
@@ -22,6 +25,8 @@ public abstract class TypeError<T> : ITypeError, ITypeErrorForNode<T> where T : 
 
   /// <inheritdoc />
   public virtual DiagnosticSeverity Severity => DiagnosticSeverity.Error;
+
+  public SourceCodeLocation Location => ForNode.Location;
 
 
   /// <param name="node"> The node at which the error occurred. </param>

@@ -1,7 +1,5 @@
-﻿using Antlr4.Runtime;
-using OneOf;
+﻿using OneOf;
 
-namespace RadParser.AST.Node; 
+namespace RadParser.AST.Node;
 
-[GenerateOneOf]
-public partial class Value : OneOfBase<Literal, Expression, Identifier> { }
+[GenerateOneOf] public partial class Value : OneOfBase<Literal, Expression, Identifier> {}

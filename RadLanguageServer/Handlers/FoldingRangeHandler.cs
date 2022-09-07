@@ -2,7 +2,7 @@
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 
-namespace RadLanguageServer;
+namespace RadLanguageServer.Handlers;
 
 internal class FoldingRangeHandler : IFoldingRangeHandler {
   public FoldingRangeRegistrationOptions GetRegistrationOptions() {

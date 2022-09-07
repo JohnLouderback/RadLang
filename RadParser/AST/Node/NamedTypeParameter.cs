@@ -7,4 +7,10 @@ public class NamedTypeParameter : Declaration {
   
   public NamedTypeParameter(ParserRuleContext context) : base(context) {
   }
+
+
+  /// <inheritdoc />
+  public override bool IsStaticConstant =>
+    false; // Parameters are variable by their very nature, so they cannot be considered static constants.
+
 }

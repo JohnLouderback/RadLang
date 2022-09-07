@@ -50,3 +50,14 @@ NUMBER: [0-9]+;
 // Whitespace
 WHITESPACE: (' '|'\t')+ -> channel(WHITESPACE_CHANNEL);
 NEWLINE: ('\r'? '\n' | '\r')+ -> channel(WHITESPACE_CHANNEL);
+
+// Comments
+MULT_LINE_COMMENT
+    : '/*' .*? '*/' -> channel(COMMENTS_CHANNEL)
+    ;
+DOC_COMMENT
+    : '///' ~[\r\n]* -> channel(COMMENTS_CHANNEL)
+    ;
+LINE_COMMENT
+    : '//' ~[\r\n]* -> channel(COMMENTS_CHANNEL)
+    ;

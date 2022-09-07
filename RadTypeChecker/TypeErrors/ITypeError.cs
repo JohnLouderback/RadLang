@@ -4,11 +4,6 @@ namespace RadTypeChecker.TypeErrors;
 
 public interface ITypeError : IDiagnostic {
   /// <summary>
-  ///   The message explaining the cause of the error.
-  /// </summary>
-  string Message { get; }
-
-  /// <summary>
   ///   A unique numeric identifier for the error.
   /// </summary>
   uint ErrorCode { get; }

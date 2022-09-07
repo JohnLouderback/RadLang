@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
+    <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

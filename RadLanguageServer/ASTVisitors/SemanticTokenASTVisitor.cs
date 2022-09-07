@@ -5,7 +5,7 @@ using RadParser.AST.Node;
 using RadParser.Utils;
 using Void = RadParser.AST.Node.Void;
 
-namespace RadLanguageServer;
+namespace RadLanguageServer.ASTVisitors;
 
 public class SemanticTokenASTVisitor : BaseASTVisitor {
   private readonly List<(INode, SemanticTokenType, SemanticTokenModifier[])> tokens = new();

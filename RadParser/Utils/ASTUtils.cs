@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using OneOf;
 using RadParser.AST.Node;
-using RadParser.Constructs;
 using RadParser.Utils.Attributes;
+using RadUtils.Constructs;
 
 namespace RadParser.Utils;
 

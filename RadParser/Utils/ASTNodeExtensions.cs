@@ -1,5 +1,5 @@
 ﻿using RadParser.AST.Node;
-using RadParser.Constructs;
+using RadUtils.Constructs;
 
 namespace RadParser.Utils;
 

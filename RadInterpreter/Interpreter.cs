@@ -27,6 +27,8 @@ public class Interpreter {
     // Create a token parser.
     var parser = new Rad(tokenStream);
 
+    parser.AddErrorListener(new SyntaxErrorListener());
+
     // Parse the tokens to generate the "Concrete Syntax Tree".
     var cst      = parser.startRule();
     var ast      = new ASTGenerator().GenerateASTFromCST(cst);

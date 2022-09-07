@@ -2,11 +2,13 @@
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using RadLanguageServer.Services;
 using RadParser.AST.Node;
-using RadParser.Constructs;
+using RadParser.AST.Traits;
 using RadParser.Utils;
+using RadUtils.Constructs;
 
-namespace RadLanguageServer;
+namespace RadLanguageServer.Handlers;
 
 public class HoverHandler : HoverHandlerBase {
   private readonly ILogger<HoverHandler> logger;

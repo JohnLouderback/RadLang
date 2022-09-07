@@ -1,4 +1,4 @@
-﻿namespace RadLanguageServer;
+﻿namespace RadLanguageServer.Constructs;
 
 public class LineColumnTextChange {
   public string NewText { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace RadParser.Constructs;
+﻿namespace RadUtils.Constructs;
 
 /// <summary>
 ///   Represents the location of a conceptual "cursor" within the document.

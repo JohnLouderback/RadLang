@@ -35,7 +35,9 @@ numberType: UNSIGNED? keyword=(INT_KEYWORD | FLOAT_KEYWORD);
 
 // Statements and Expressions
 statementKeyword: RETURN | OUT;
-definiteStatement: statementKeyword? expression? SEMICOLON;
+definiteStatement: statementKeyword? expression SEMICOLON
+    | statementKeyword? expression { NotifyErrorListeners(TokenStream.LT(-1), "Missing \";\" at end of statement.", null); };
+
 expression: expression op=(STAR | FSLASH) expression
     | expression op=(PLUS | MINUS) expression
     | literal

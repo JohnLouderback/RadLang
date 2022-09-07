@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using RadParser.AST.Traits;
 using RadParser.Constructs;
 
 namespace RadParser.AST.Node;

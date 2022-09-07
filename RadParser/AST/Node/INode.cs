@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using RadUtils.Constructs;
 
 namespace RadParser.AST.Node;
 
@@ -13,6 +14,11 @@ public interface INode {
   ///   The string text from the source code from which this node was generated.
   /// </summary>
   public string Text { get; }
+
+  /// <summary>
+  ///   The location in the source code this node represents.
+  /// </summary>
+  public SourceCodeLocation Location { get; }
 
   /// <summary>
   ///   The starting line that this node occurs on in the source code.

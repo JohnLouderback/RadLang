@@ -7,6 +7,8 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Server;
 using RadLanguageServer;
+using RadLanguageServer.Handlers;
+using RadLanguageServer.Services;
 using Serilog;
 
 MainAsync(args).Wait();
@@ -45,7 +47,7 @@ static async Task MainAsync(string[] args) {
               .WithHandler<DidChangeWatchedFilesHandler>()
               .WithHandler<FoldingRangeHandler>()
               .WithHandler<MyWorkspaceSymbolsHandler>()
-              .WithHandler<MyDocumentSymbolHandler>()
+              .WithHandler<DocumentSymbolHandler>()
               .WithHandler<SemanticTokensHandler>()
               .WithServices(x => x.AddLogging())
               .WithServices(

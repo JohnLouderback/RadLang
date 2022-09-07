@@ -1,11 +1,20 @@
 ﻿using Antlr4.Runtime;
 using RadParser.Utils;
+using RadUtils.Constructs;
 
 namespace RadParser.AST.Node;
 
 public abstract class Node<T> : INode {
   /// <inheritdoc />
   public string Text { get; internal set; }
+
+  /// <inheritdoc />
+  public SourceCodeLocation Location => new() {
+    Line      = Line,
+    EndLine   = EndLine,
+    Column    = Column,
+    EndColumn = EndColumn
+  };
 
   /// <inheritdoc />
   public INode Parent { get; set; }

@@ -3,7 +3,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Workspace;
 
-namespace RadLanguageServer;
+namespace RadLanguageServer.Handlers;
 
 internal class DidChangeWatchedFilesHandler : IDidChangeWatchedFilesHandler {
   public DidChangeWatchedFilesRegistrationOptions GetRegistrationOptions() {

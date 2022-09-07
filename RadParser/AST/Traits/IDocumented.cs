@@ -1,6 +1,6 @@
 ﻿using RadParser.Constructs;
 
-namespace RadParser.AST.Node;
+namespace RadParser.AST.Traits;
 
 /// <summary>
 /// The trait of a node that has documentation defined.

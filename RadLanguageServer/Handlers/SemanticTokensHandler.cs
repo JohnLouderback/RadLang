@@ -2,8 +2,10 @@
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using RadLanguageServer.ASTVisitors;
+using RadLanguageServer.Services;
 
-namespace RadLanguageServer;
+namespace RadLanguageServer.Handlers;
 
 public class SemanticTokensHandler : SemanticTokensHandlerBase {
   private readonly ILogger logger;
