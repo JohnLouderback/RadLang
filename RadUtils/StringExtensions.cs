@@ -4,6 +4,16 @@ namespace RadUtils;
 
 public static class StringExtensions {
   /// <summary>
+  ///   Provides a "camelCase" string, given a "PascalCase" string.
+  /// </summary>
+  /// <param name="str"> The source string. </param>
+  /// <returns> The source string in "camelCase" format. </returns>
+  public static string PascalCaseToCamelCase(this string str) {
+    return str[0].ToString().ToLower() + str[1..];
+  }
+
+
+  /// <summary>
   ///   Provides a "Title Case" string, given a "PascalCase" string.
   /// </summary>
   /// <param name="str"> The source string. </param>

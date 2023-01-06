@@ -1,7 +1,8 @@
-import FriendlyErrorsPlugin from '@nuxt/friendly-errors-webpack-plugin';
 import { resolve } from 'path';
 import { Configuration } from 'webpack';
 import WebpackBar from 'webpackbar';
+
+import FriendlyErrorsPlugin from '@nuxt/friendly-errors-webpack-plugin';
 
 const projectRoot = resolve(__dirname, '../../');
 const commonWebpackConfig: Configuration = {
@@ -18,7 +19,10 @@ const commonWebpackConfig: Configuration = {
         filename: 'extension.js',
         devtoolModuleFilenameTemplate: '../[resource-path]',
     },
-    resolve: { extensions: ['.ts', '.js', '.json'] },
+    resolve: {
+        mainFields: ['browser', 'module', 'main'], // look for `browser` entry point in imported node modules
+        extensions: ['.ts', '.js', '.json']
+    },
     externals: {
         vscode: 'commonjs vscode',
     },

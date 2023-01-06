@@ -5,9 +5,14 @@ import {
   workspace,
 } from 'vscode';
 import {
+  CloseAction,
+  ErrorAction,
+  ErrorHandlerResult,
   LanguageClient,
   LanguageClientOptions,
+  Message,
   ServerOptions,
+  TransportKind,
 } from 'vscode-languageclient/node';
 
 let client: LanguageClient;
@@ -23,11 +28,11 @@ export function activate(context: ExtensionContext) {
       '..',
       'Projects',
       'RadLang',
-      'RadLanguageServer',
+      'RadLanguageServerV2',
       'bin',
       'Debug',
       'net7.0',
-      'RadLanguageServer.exe',
+      'RadLanguageServerV2.exe',
     ),
   );
   // The debug options for the server
@@ -37,9 +42,11 @@ export function activate(context: ExtensionContext) {
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
   const serverOptions: ServerOptions = {
-    run: { command: serverExecutable },
+    run: { command: serverExecutable, transport: TransportKind.stdio },
     debug: {
       command: serverExecutable,
+      transport: TransportKind.stdio,
+      ...debugOptions,
     },
   };
 
@@ -50,6 +57,21 @@ export function activate(context: ExtensionContext) {
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
       fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
+    },
+    errorHandler: {
+      error(error: Error, message?: Message): ErrorHandlerResult {
+        return {
+          action: ErrorAction.Shutdown,
+          message: `An error occurred on the Rad Language Server: "${message}"`,
+        };
+      },
+      closed() {
+        return {
+          action: CloseAction.DoNotRestart,
+          message:
+            'An error occurred on the Rad Language Server and the connection to the server was closed as a result.',
+        };
+      },
     },
   };
 

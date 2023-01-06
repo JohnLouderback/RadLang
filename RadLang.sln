@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadDiagnostics", "RadDiagno
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadUtils", "RadUtils\RadUtils.csproj", "{70A69DE9-418B-4372-A908-7CA36D615A76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadLanguageServerV2", "RadLanguageServerV2\RadLanguageServerV2.csproj", "{7F35B4DF-3FE1-4BD6-B29B-E178EC299987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{70A69DE9-418B-4372-A908-7CA36D615A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70A69DE9-418B-4372-A908-7CA36D615A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70A69DE9-418B-4372-A908-7CA36D615A76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F35B4DF-3FE1-4BD6-B29B-E178EC299987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F35B4DF-3FE1-4BD6-B29B-E178EC299987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F35B4DF-3FE1-4BD6-B29B-E178EC299987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F35B4DF-3FE1-4BD6-B29B-E178EC299987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

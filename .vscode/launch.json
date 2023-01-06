@@ -18,11 +18,11 @@
         "request": "launch",
         "args": ["--extensionDevelopmentPath=${workspaceFolder}/rad-lang"],
         "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-        "skipFiles": [
-            "<node_internals>/**",
-            "**/node_modules/**",
-            "**/Resources/app/out/vs/**"
-        ],
+        // "skipFiles": [
+        //     "<node_internals>/**",
+        //     "**/node_modules/**",
+        //     "**/Resources/app/out/vs/**"
+        // ],
         "sourceMaps": true,
         "preLaunchTask": "${defaultBuildTask}"
     }
