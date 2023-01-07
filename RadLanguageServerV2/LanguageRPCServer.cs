@@ -465,6 +465,16 @@ public class LanguageRPCServer {
   }
 
 
+  public Task SendMethodNotificationAsync<TIn>(LspNotification<TIn> method, TIn param) {
+    return rpc.NotifyWithParameterObjectAsync(method.Name, param);
+  }
+
+
+  public Task<TOut> SendMethodRequestAsync<TIn, TOut>(LspRequest<TIn, TOut> method, TIn param) {
+    return rpc.InvokeWithParameterObjectAsync<TOut>(method.Name, param);
+  }
+
+
   // [JsonRpcMethod(Methods.TextDocumentSignatureHelpName)]
   // public SignatureHelp OnTextDocumentSignatureHelp(JToken arg) {
   //   traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");

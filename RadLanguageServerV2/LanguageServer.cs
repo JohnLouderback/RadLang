@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using DryIoc;
+using Microsoft.VisualStudio.LanguageServer.Protocol;
 using RadLanguageServerV2.Handlers;
+using RadLanguageServerV2.Services;
 
 namespace RadLanguageServerV2;
 
@@ -20,6 +22,11 @@ public class LanguageServer {
   ///   is running.
   /// </summary>
   public bool Initialized { get; private set; }
+
+
+  public LanguageServer() {
+    container.RegisterInstance(new LanguageServerService(this));
+  }
 
 
   /// <summary>
@@ -78,6 +85,14 @@ public class LanguageServer {
             throw new InvalidOperationException(
                 handlerNotFoundMessage
               )).Handler;
+  }
+
+
+  public async Task PublishDiagnostics(PublishDiagnosticParams parameter) {
+    await languageRPCServer.SendMethodNotificationAsync(
+        new LspNotification<PublishDiagnosticParams>(Methods.TextDocumentPublishDiagnosticsName),
+        parameter
+      );
   }
 
 

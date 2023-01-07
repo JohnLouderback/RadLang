@@ -6,10 +6,15 @@ namespace RadLanguageServerV2.Handlers;
 
 public class DidOpenTextDocumentHandler : IVoidRequestHandler<DidOpenTextDocumentParams> {
   private readonly DocumentManagerService documentManagerService;
+  private readonly DiagnosticsService diagnosticsService;
 
 
-  public DidOpenTextDocumentHandler(DocumentManagerService documentManagerService) {
+  public DidOpenTextDocumentHandler(
+    DocumentManagerService documentManagerService,
+    DiagnosticsService diagnosticsService
+  ) {
     this.documentManagerService = documentManagerService;
+    this.diagnosticsService     = diagnosticsService;
   }
 
 
@@ -19,5 +24,8 @@ public class DidOpenTextDocumentHandler : IVoidRequestHandler<DidOpenTextDocumen
         document.Uri,
         new DocumentContent(document.Text)
       );
+
+    await Task.Yield();
+    diagnosticsService.PublishDiagnostics(document.Uri);
   }
 }

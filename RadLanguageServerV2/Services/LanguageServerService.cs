@@ -1,3 +1,17 @@
-﻿namespace RadLanguageServerV2.Services;
+﻿using Microsoft.VisualStudio.LanguageServer.Protocol;
 
-public class LanguageServerService {}
+namespace RadLanguageServerV2.Services;
+
+public class LanguageServerService {
+  private readonly LanguageServer languageServer;
+
+
+  public LanguageServerService(LanguageServer languageServer) {
+    this.languageServer = languageServer;
+  }
+
+
+  public async Task PublishDiagnostics(PublishDiagnosticParams parameter) {
+    await languageServer.PublishDiagnostics(parameter);
+  }
+}

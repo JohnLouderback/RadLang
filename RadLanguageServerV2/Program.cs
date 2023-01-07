@@ -43,6 +43,7 @@ await Task.Run(
           TextDocumentSymbolHandler
         >(Methods.TextDocumentDocumentSymbolName)
         .WithService<DocumentManagerService>()
+        .WithService<DiagnosticsService>()
         .Start(inputStream, outputStream);
 
       return exitSignal.Task;

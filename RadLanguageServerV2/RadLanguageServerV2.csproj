@@ -17,8 +17,6 @@
   <ItemGroup>
     <Compile Remove="Test.cs" />
     <None Include="Test.cs" />
-    <Compile Remove="Services\DiagnosticsService.cs" />
-    <None Include="Services\DiagnosticsService.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,10 +6,15 @@ namespace RadLanguageServerV2.Handlers;
 
 public class DidChangeTextDocumentHandler : IVoidRequestHandler<DidChangeTextDocumentParams> {
   private readonly DocumentManagerService documentManagerService;
+  private readonly DiagnosticsService diagnosticsService;
 
 
-  public DidChangeTextDocumentHandler(DocumentManagerService documentManagerService) {
+  public DidChangeTextDocumentHandler(
+    DocumentManagerService documentManagerService,
+    DiagnosticsService diagnosticsService
+  ) {
     this.documentManagerService = documentManagerService;
+    this.diagnosticsService     = diagnosticsService;
   }
 
 
@@ -38,6 +43,9 @@ public class DidChangeTextDocumentHandler : IVoidRequestHandler<DidChangeTextDoc
             new DocumentContent(change)
           );
       }
+
+      await Task.Yield();
+      diagnosticsService.PublishDiagnostics(textDocument.Uri);
     }
   }
 }

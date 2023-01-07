@@ -39,17 +39,17 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override Expression VisitExpression(Rad.ExpressionContext context) {
-    if (context.functionCall() is not null) {
+    if (context?.functionCall() is not null) {
       return VisitFunctionCall(context.functionCall());
     }
 
-    if (context.literal() is not null) {
+    if (context?.literal() is not null) {
       return new LiteralExpression(context.literal()) {
         Literal = VisitLiteral(context.literal())
       };
     }
 
-    if (context.ID() is not null) {
+    if (context?.ID() is not null) {
       return new ReferenceExpression(context) {
         Reference = new Reference(context.ID()) {
           Identifier = new Identifier(context.ID())
@@ -58,7 +58,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
     }
 
     // If this expression is an operation.
-    if (context.op is not null) {
+    if (context?.op is not null) {
       (ITerminalNode? operatorNode, OperatorType operatorType) = (default, default);
 
       if (context.op == context.STAR()?.Payload) {
@@ -166,10 +166,10 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override TypeReference VisitNumberType(Rad.NumberTypeContext context) {
     ITerminalNode tokenNode;
-    if (context.keyword == context.INT_KEYWORD().Payload) {
+    if (context.keyword == context.INT_KEYWORD()?.Payload) {
       tokenNode = context.INT_KEYWORD();
     }
-    else if (context.keyword == context.FLOAT_KEYWORD().Payload) {
+    else if (context.keyword == context.FLOAT_KEYWORD()?.Payload) {
       tokenNode = context.FLOAT_KEYWORD();
     }
     else {
@@ -260,7 +260,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
                     declCtx
                   ),
                 _ => throw new Exception(
-                         $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                         $"Top-level statement was not of a known context type. Got: {
+                           child.GetType().Name
+                         }"
                        )
               };
 
@@ -296,7 +298,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
             Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
             Rad.DeclarationContext declCtx            => VisitDeclaration(declCtx),
             _ => throw new Exception(
-                     $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                     $"Top-level statement was not of a known context type. Got: {
+                       child.GetType().Name
+                     }"
                    )
           };
 
