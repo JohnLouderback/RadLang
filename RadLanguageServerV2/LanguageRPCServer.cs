@@ -3,6 +3,10 @@ using Microsoft.VisualStudio.LanguageServer.Protocol;
 using Newtonsoft.Json.Linq;
 using RadLanguageServerV2.Constructs;
 using RadLanguageServerV2.LanguageServerEx;
+using RadLanguageServerV2.LanguageServerEx.Models.InlayHint;
+using RadLanguageServerV2.LanguageServerEx.Options;
+using RadLanguageServerV2.LanguageServerEx.Options.InlayHints;
+using RadLanguageServerV2.LanguageServerEx.Params.InlayHint;
 using RadUtils;
 using StreamJsonRpc;
 
@@ -62,7 +66,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.ExitName)]
   public void Exit() {
-    traceSource.TraceEvent(TraceEventType.Information, 0, "Received Exit notification");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.ExitName} Received Exit notification"
+      );
     //server.Exit();
   }
 
@@ -105,7 +113,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.TextDocumentDocumentSymbolName)]
   public async Task<DocumentSymbol[]> GetDocumentSymbols(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.TextDocumentDocumentSymbolName} Received: {arg}"
+      );
     var parameter = arg.ToObject<DocumentSymbolParams>()!;
     return await server.GetHandler<DocumentSymbolParams, DocumentSymbol[]>(
                Methods.TextDocumentDocumentSymbolName
@@ -113,9 +125,27 @@ public class LanguageRPCServer {
   }
 
 
+  [JsonRpcMethod(MethodsEx.InlayHintsName)]
+  public async Task<InlayHint[]> GetInlayHints(JToken arg) {
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{MethodsEx.InlayHintsName} Received: {arg}"
+      );
+    var parameter = arg.ToObject<InlayHintParams>()!;
+    return await server.GetHandler<InlayHintParams, InlayHint[]>(
+               MethodsEx.InlayHintsName
+             )(parameter);
+  }
+
+
   [JsonRpcMethod(Methods.TextDocumentSemanticTokensFullName)]
   public async Task<SemanticTokens> GetTextDocumentSemanticTokens(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.TextDocumentSemanticTokensFullName} Received: {arg}"
+      );
     var parameter = arg.ToObject<SemanticTokensParams>()!;
     Debug.WriteLine(
         $"Document Open: {parameter.TextDocument.Uri.AbsolutePath}"
@@ -201,9 +231,13 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.InitializeName)]
   public object Initialize(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.InitializeName} Received: {arg}"
+      );
 
-    var capabilities = new ServerCapabilities {
+    var capabilities = new ServerCapabilitiesEx {
       TextDocumentSync = new TextDocumentSyncOptions {
         OpenClose = true,
         Change    = TextDocumentSyncKind.Full
@@ -246,6 +280,9 @@ public class LanguageRPCServer {
         Full = new SemanticTokensFullOptions {
           Delta = true
         }
+      },
+      InlayHintOptions = new InlayHintOptions {
+        ResolveProvider = false
       }
     };
 
@@ -267,14 +304,22 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.InitializedName)]
   public void Initialized(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.InitializedName} Received: {arg}"
+      );
     OnInitialized?.Invoke(this, EventArgs.Empty);
   }
 
 
   [JsonRpcMethod(Methods.WorkspaceDidChangeConfigurationName)]
   public void OnDidChangeConfiguration(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.WorkspaceDidChangeConfigurationName} Received: {arg}"
+      );
     var parameter = arg.ToObject<DidChangeConfigurationParams>();
     //server.SendSettings(parameter);
   }
@@ -282,7 +327,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.TextDocumentHoverName)]
   public async Task<Hover> OnHover(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.TextDocumentHoverName} Received: {arg}"
+      );
     var parameter = arg.ToObject<TextDocumentPositionParams>()!;
     var result =
       await server.GetHandler<TextDocumentPositionParams, Hover?>(Methods.TextDocumentHoverName)(
@@ -301,7 +350,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.TextDocumentDidChangeName)]
   public async Task OnTextDocumentChanged(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.TextDocumentDidChangeName} Received: {arg}"
+      );
     var parameter = arg.ToObject<DidChangeTextDocumentParams>()!;
 
     await server.GetHandler<DidChangeTextDocumentParams>(Methods.TextDocumentDidChangeName)(
@@ -456,7 +509,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.TextDocumentDidOpenName)]
   public async Task OnTextDocumentOpened(JToken arg) {
-    traceSource.TraceEvent(TraceEventType.Information, 0, $"Received: {arg}");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.TextDocumentDidOpenName} Received: {arg}"
+      );
     var parameter = arg.ToObject<DidOpenTextDocumentParams>()!;
     Debug.WriteLine(
         $"Document Open: {parameter.TextDocument.Uri.AbsolutePath}"
@@ -563,7 +620,11 @@ public class LanguageRPCServer {
 
   [JsonRpcMethod(Methods.ShutdownName)]
   public object Shutdown() {
-    traceSource.TraceEvent(TraceEventType.Information, 0, "Received Shutdown notification");
+    traceSource.TraceEvent(
+        TraceEventType.Information,
+        0,
+        $"{Methods.ShutdownName} Received Shutdown notification"
+      );
     return null;
   }
 }

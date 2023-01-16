@@ -26,7 +26,7 @@ public class DiagnosticsService {
   /// <summary>
   ///   Publishes the diagnostics for a given document.
   /// </summary>
-  /// <param name="forDocument"> The document to run the diagnostics for. </param>
+  /// <param name="forDocumentURI"> The document to run the diagnostics for. </param>
   public void PublishDiagnostics(Uri forDocumentURI) {
     var document     = documentManagerService.Documents[forDocumentURI];
     var syntaxErrors = document.SyntaxErrors;

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Microsoft.VisualStudio.LanguageServer.Protocol;
 
-namespace RadLanguageServerV2.LanguageServerEx;
+namespace RadLanguageServerV2.LanguageServerEx.Options;
 
 /// <inheritdoc />
 /// <summary>

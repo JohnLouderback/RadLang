@@ -4,6 +4,9 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.LanguageServer.Protocol;
 using RadLanguageServerV2;
 using RadLanguageServerV2.Handlers;
+using RadLanguageServerV2.LanguageServerEx;
+using RadLanguageServerV2.LanguageServerEx.Models.InlayHint;
+using RadLanguageServerV2.LanguageServerEx.Params.InlayHint;
 using RadLanguageServerV2.Services;
 
 Debugger.Launch();
@@ -42,6 +45,11 @@ await Task.Run(
           DocumentSymbol[],
           TextDocumentSymbolHandler
         >(Methods.TextDocumentDocumentSymbolName)
+        .WithHandler<
+          InlayHintParams,
+          InlayHint[],
+          GetInlayHintsHandler
+        >(MethodsEx.InlayHintsName)
         .WithService<DocumentManagerService>()
         .WithService<DiagnosticsService>()
         .Start(inputStream, outputStream);

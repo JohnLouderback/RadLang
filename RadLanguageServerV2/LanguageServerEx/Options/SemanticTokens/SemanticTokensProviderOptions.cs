@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.LanguageServer.Protocol;
 using Newtonsoft.Json;
 
-namespace RadLanguageServerV2.LanguageServerEx;
+namespace RadLanguageServerV2.LanguageServerEx.Options;
 
 /// <inheritdoc />
 /// <summary>

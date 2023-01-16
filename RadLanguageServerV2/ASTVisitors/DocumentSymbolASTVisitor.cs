@@ -3,7 +3,7 @@ using RadParser;
 using RadParser.AST.Node;
 using Range = Microsoft.VisualStudio.LanguageServer.Protocol.Range;
 
-namespace RadLanguageServer.ASTVisitors;
+namespace RadLanguageServerV2.ASTVisitors;
 
 public class DocumentSymbolASTVisitor : BaseASTVisitor {
   private readonly Stack<IList<DocumentSymbol>> Parents = new();

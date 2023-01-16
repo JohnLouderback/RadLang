@@ -87,7 +87,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
       }
     }
 
-    if (context.ID() is not null) {
+    if (context?.ID() is not null) {
       return new ReferenceExpression(context) {
         Reference = new Reference(context.ID()) {
           Identifier = new Identifier(context.ID())
