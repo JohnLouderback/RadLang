@@ -7,7 +7,7 @@
           "request": "launch",
           "input": "RadLexer/test-input.rad",
           "grammar": "RadLexer/Rad.g4",
-          "startRule": "start",
+          "startRule": "startRule",
           "printParseTree": true,
           "visualParseTree": true,
           "args": ["-encoding", "UTF8"]

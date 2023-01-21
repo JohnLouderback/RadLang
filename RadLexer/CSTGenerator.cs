@@ -52,9 +52,11 @@ public class CSTGenerator {
 
     // Create a listener that handles syntax errors.
     var errorListener = new SyntaxErrorListener();
+    var errorHandler  = new SyntaxErrorStrategy();
 
-    // Add error listener for handling syntax errors.
+    // Add error listener and handler for handling syntax errors.
     parser.AddErrorListener(errorListener);
+    parser.ErrorHandler = errorHandler;
 
     // Parse the tokens to generate the "Concrete Syntax Tree".
     var cst = parser.startRule();

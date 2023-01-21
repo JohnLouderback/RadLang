@@ -8,7 +8,7 @@
           <option name="autoGen" value="true" />
           <option name="outputDir" value="C:\Users\John\Projects\RadLang\RadLexer" />
           <option name="libDir" value="" />
-          <option name="encoding" value="" />
+          <option name="encoding" value="utf-8" />
           <option name="pkg" value="RadLexer" />
           <option name="language" value="CSharp" />
           <option name="generateVisitor" value="true" />

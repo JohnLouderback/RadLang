@@ -11,7 +11,7 @@ public class InlayHintASTVisitor : BaseASTVisitor {
 
 
   public override void Visit(FunctionCallExpression node) {
-    if (node.Reference.GetDeclaration() is FunctionDeclaration funcDecl) {
+    if (node.Reference?.GetDeclaration() is FunctionDeclaration funcDecl) {
       var argIndex = 0;
       // Add name annotations to arguments.
       foreach (var argument in node.Arguments) {

@@ -15,6 +15,11 @@ public class SyntaxErrorListener : BaseErrorListener {
     string msg,
     RecognitionException e
   ) {
+    if (e is NoViableAltException or InputMismatchException) {
+      offendingSymbol = e.OffendingToken;
+      msg             = $"Unexpected token \"{offendingSymbol.Text}\".";
+    }
+
     Errors.Add(new SyntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e));
   }
 }

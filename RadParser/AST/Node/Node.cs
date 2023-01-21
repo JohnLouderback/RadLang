@@ -5,6 +5,9 @@ using RadUtils.Constructs;
 namespace RadParser.AST.Node;
 
 public abstract class Node<T> : INode {
+  private static int LastKnownLineNumber = 1;
+  private static int LastKnownColumnNumber;
+
   /// <inheritdoc />
   public string Text { get; internal set; }
 
@@ -49,15 +52,28 @@ public abstract class Node<T> : INode {
   public int EndColumn => Line == EndLine ? Column + Width : Lines[^1].Length;
 
   /// <inheritdoc />
-  public ParserRuleContext CSTNode { get; internal set; }
+  public ParserRuleContext? CSTNode { get; internal set; }
 
 
   public Node(ParserRuleContext context) {
-    Text    = context.GetFullText();
-    Line    = context.Start.Line;
-    Column  = context.Start.Column;
-    Width   = Text.Length;
-    CSTNode = context;
+    // Context being `null` usually indicates a syntax error. We try to recover as well as we can.
+    if (context is null) {
+      Text    = "";
+      Line    = LastKnownLineNumber;
+      Column  = LastKnownColumnNumber;
+      Width   = 0;
+      CSTNode = null;
+    }
+    // Otherwise, proceed as normal.
+    else {
+      Text                  = context.GetFullText();
+      Line                  = context.Start.Line;
+      Column                = context.Start.Column;
+      Width                 = Text.Length;
+      CSTNode               = context;
+      LastKnownLineNumber   = Line;
+      LastKnownColumnNumber = Column + Width;
+    }
   }
 
 
@@ -91,7 +107,13 @@ public abstract class Node<T> : INode {
 
     if (Parent is null) {
       throw new Exception(
-          $"{nameof(Parent)} is null for {GetType().Name} \"{Text}\". It's possible the AST is being accessed prior to full generation."
+          $"{
+            nameof(Parent)
+          } is null for {
+            GetType().Name
+          } \"{
+            Text
+          }\". It's possible the AST is being accessed prior to full generation."
         );
     }
 

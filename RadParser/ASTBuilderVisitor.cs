@@ -39,6 +39,11 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override Expression VisitExpression(Rad.ExpressionContext context) {
+    // If context is null, no expression exists yet. Usually because the user is still typing.
+    if (context is null) {
+      return new EmptyExpression(context);
+    }
+
     if (context?.functionCall() is not null) {
       return VisitFunctionCall(context.functionCall());
     }
@@ -218,6 +223,13 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   public override NodeCollection<PositionalParameter> VisitOrderedParameters(
     Rad.OrderedParametersContext context
   ) {
+    // If context is null, no expression exists yet. Usually because the user is still typing.
+    if (context is null) {
+      return new NodeCollection<PositionalParameter>(null) {
+        Children = new List<PositionalParameter>()
+      };
+    }
+
     return new NodeCollection<PositionalParameter>(context) {
       Children = context.orderedParameter().Select(param => VisitOrderedParameter(param)).ToList()
     };

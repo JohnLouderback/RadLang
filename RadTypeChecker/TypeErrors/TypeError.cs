@@ -18,7 +18,9 @@ public abstract class TypeError<T> : ITypeError, ITypeErrorForNode<T> where T : 
   public virtual string Message { get; }
 
   /// <inheritdoc />
-  public abstract uint ErrorCode { get; }
+  public uint ErrorCode =>
+    // Gets the error code from the `TypeErrors` enum based on the name of the current subclass.
+    EnumUtils.GetValueOf<TypeErrors, uint>(GetType().Name);
 
   /// <inheritdoc />
   public virtual string ErrorCodeString => $"RTE-{ErrorCode.ToString().PadLeft(4, '0')}";
