@@ -61,6 +61,10 @@ public class SemanticTokenASTVisitor : BaseASTVisitor {
       Visit(param);
     }
 
+    if (node.ReturnTypeColon is not null) {
+      PushToken(node.ReturnTypeColon, SemanticTokenType.Operator);
+    }
+
     Visit(node.ReturnType);
 
     Visit(node.Body);
@@ -79,6 +83,10 @@ public class SemanticTokenASTVisitor : BaseASTVisitor {
 
   public override void Visit(NamedTypeParameter node) {
     PushToken(node.Identifier, SemanticTokenType.Parameter, SemanticTokenModifier.Declaration);
+
+    if (node.Colon is not null) {
+      PushToken(node.Colon, SemanticTokenType.Operator);
+    }
 
     Visit(node.TypeReference);
   }

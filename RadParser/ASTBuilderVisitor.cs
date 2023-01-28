@@ -128,10 +128,11 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
       Keyword = new DeclaratorKeyword(context.FN()) {
         Type = DeclaratorKeywordType.Function
       },
-      Identifier = new Identifier(context.ID()),
-      Parameters = VisitNamedTypeTuple(context.namedTypeTuple()),
-      ReturnType = VisitReturnTypeSpecifier(context.returnTypeSpecifier()),
-      Body       = VisitFunctionBody(context.functionBody())
+      Identifier      = new Identifier(context.ID()),
+      Parameters      = VisitNamedTypeTuple(context.namedTypeTuple()),
+      ReturnTypeColon = new Token(context.returnTypeSpecifier()?.typeSpecifier()?.COLON()),
+      ReturnType      = VisitReturnTypeSpecifier(context.returnTypeSpecifier()),
+      Body            = VisitFunctionBody(context.functionBody())
     };
   }
 
@@ -148,6 +149,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   public override NamedTypeParameter VisitNamedParameter(Rad.NamedParameterContext context) {
     return new NamedTypeParameter(context) {
       Identifier    = new Identifier(context.ID()),
+      Colon         = new Token(context.typeSpecifier()?.COLON()),
       TypeReference = VisitTypeSpecifier(context.typeSpecifier())
     };
   }

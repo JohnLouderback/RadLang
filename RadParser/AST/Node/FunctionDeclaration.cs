@@ -4,6 +4,12 @@ namespace RadParser.AST.Node;
 
 public class FunctionDeclaration : Declaration {
   public List<NamedTypeParameter> Parameters { get; internal set; }
+
+  /// <summary>
+  ///   References the colon token that denotes a return type annotation given in the function declaration.
+  /// </summary>
+  public Token ReturnTypeColon { get; internal set; }
+
   public TypeReference ReturnType { get; internal set; }
   public FunctionScope Body { get; internal set; }
 
