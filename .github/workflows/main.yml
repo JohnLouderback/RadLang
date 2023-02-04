@@ -19,9 +19,9 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Setup C project
-      uses: actions/setup-cmake@v1
+      uses: Symbitic/install-cmake@v0.1.0
       with:
-        cmake-version: 3.23
+        cmake: 3.23
         
     - name: Build C project
       run: |
