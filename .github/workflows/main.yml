@@ -16,12 +16,12 @@ jobs:
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 7.0.x
 
     - name: Setup C project
       uses: Symbitic/install-cmake@v0.1.0
       with:
-        cmake: 3.23
+        cmake: 3.24.0
         
     - name: Build C project
       run: |
