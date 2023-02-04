@@ -9,30 +9,50 @@ env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-  build:
+  setup-cmake: 
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 7.0.x
-
     - name: Setup C project
       uses: Symbitic/install-cmake@v0.1.0
       with:
         cmake: 3.24.0
-        
+      
+      
+  setup-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 7.0.x
+      
+      
+  build-runtime-library:
+    runs-on: ubuntu-latest
+    needs: setup-cmake
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Build C project
       run: |
         cmake -H. -Bbuild
         cmake --build build
-
+      
+      
+  build-compiler-toolchain:
+    runs-on: ubuntu-latest
+    needs: [build-runtime-library, setup-dotnet]
+    
+    steps:
     - name: Build .NET project
       run: dotnet build --configuration Release
 
     - name: Test .NET project
       run: dotnet test --configuration Release
+    
