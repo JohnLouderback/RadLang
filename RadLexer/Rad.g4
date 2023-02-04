@@ -12,9 +12,16 @@ declaration: functionDeclaration;
 //Functions
 // Function Declaration
 functionDeclaration:
-	FN ID namedTypeTuple returnTypeSpecifier THEN functionBody;
-returnTypeSpecifier: typeSpecifier | voidSpecifier;
-typeSpecifier: COLON (numberType | ID);
+	FN ID namedTypeTuple returnTypeSpecifier THEN functionBody
+	// Error cases:
+	| FN ID namedTypeTuple THEN functionBody {NotifyErrorListeners(TokenStream.LT(-1), $"Function declaration is missing a return type annotation.", null);
+		};
+returnTypeSpecifier: voidSpecifier | typeSpecifier;
+typeSpecifier:
+	COLON (numberType | ID)
+	// Error cases:
+	| COLON {NotifyErrorListeners(TokenStream.LT(-1), $"A type identifier for \"{TokenStream.LT(-2).Text}\" is missing from this type annotation.", null);
+		};
 voidSpecifier: COLON VOID;
 functionBody: statementGroup;
 // Function Call
@@ -27,7 +34,11 @@ namedTypeTuple:
 	| LPAREN namedParameters? {NotifyErrorListeners(TokenStream.LT(-1), "Missing closing \")\" in parenthetical.", null);
 		};
 namedParameters: namedParameter (COMMA namedParameter)*;
-namedParameter: ID typeSpecifier;
+namedParameter:
+	ID typeSpecifier
+	// Error cases:
+	| ID {NotifyErrorListeners(TokenStream.LT(-1), $"Parameter \"{TokenStream.LT(-1).Text}\" is missing a type annotation.", null);
+         		};
 // Ordered Tuples
 orderedTuple:
 	LPAREN orderedParameters? RPAREN

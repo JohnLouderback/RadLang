@@ -106,7 +106,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override FunctionScope VisitFunctionBody(Rad.FunctionBodyContext context) {
     return new FunctionScope(context) {
-      Children = VisitStatementGroup(context.statementGroup()).Children
+      Children = VisitStatementGroup(context?.statementGroup()).Children
     };
   }
 
@@ -158,9 +158,15 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   public override NodeCollection<NamedTypeParameter> VisitNamedParameters(
     Rad.NamedParametersContext context
   ) {
-    return new NodeCollection<NamedTypeParameter>(context) {
-      Children = context.namedParameter().Select(param => VisitNamedParameter(param)).ToList()
-    };
+    // A syntax error may cause context to be null, fallback to an empty list of parameters when this is the case.
+    return context is not null
+             ? new NodeCollection<NamedTypeParameter>(context) {
+               Children = context.namedParameter()
+                 .Select(param => VisitNamedParameter(param))
+                 .ToList()
+             }
+             : new NodeCollection<NamedTypeParameter>(context)
+               { Children = new List<NamedTypeParameter>() };
   }
 
 
@@ -247,9 +253,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override TypeReference VisitReturnTypeSpecifier(Rad.ReturnTypeSpecifierContext context) {
     // ReSharper disable once ConvertIfStatementToReturnStatement
-    if (context.voidSpecifier() is not null) return new Void(context.voidSpecifier().VOID());
+    if (context?.voidSpecifier() is not null) return new Void(context.voidSpecifier().VOID());
 
-    return VisitTypeSpecifier(context.typeSpecifier());
+    return VisitTypeSpecifier(context?.typeSpecifier());
   }
 
 
@@ -263,27 +269,29 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   public override NodeCollection<FunctionScopeStatement> VisitStatementGroup(
     Rad.StatementGroupContext context
   ) {
-    var children = context.GetRuleContexts<ParserRuleContext>();
+    var children = context?.GetRuleContexts<ParserRuleContext>();
     return new NodeCollection<FunctionScopeStatement>(context) {
-      Children = children.Select(
-            child => {
-              OneOf<Statement, Declaration> node = child switch {
-                Rad.DefiniteStatementContext statementCtx =>
-                  VisitDefiniteStatement(statementCtx),
-                Rad.DeclarationContext declCtx => VisitDeclaration(
-                    declCtx
-                  ),
-                _ => throw new Exception(
-                         $"Top-level statement was not of a known context type. Got: {
-                           child.GetType().Name
-                         }"
-                       )
-              };
+      Children = children is not null
+                   ? children.Select(
+                         child => {
+                           OneOf<Statement, Declaration> node = child switch {
+                             Rad.DefiniteStatementContext statementCtx =>
+                               VisitDefiniteStatement(statementCtx),
+                             Rad.DeclarationContext declCtx => VisitDeclaration(
+                                 declCtx
+                               ),
+                             _ => throw new Exception(
+                                      $"Top-level statement was not of a known context type. Got: {
+                                        child.GetType().Name
+                                      }"
+                                    )
+                           };
 
-              return new FunctionScopeStatement(node);
-            }
-          )
-        .ToList()
+                           return new FunctionScopeStatement(node);
+                         }
+                       )
+                     .ToList()
+                   : new List<FunctionScopeStatement>()
     };
   }
 
@@ -329,8 +337,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
 
   public override TypeReference VisitTypeSpecifier(Rad.TypeSpecifierContext context) {
-    if (context.numberType() is not null) return VisitNumberType(context.numberType());
-    return new TypeReference(context.ID());
+    if (context?.numberType() is not null) return VisitNumberType(context.numberType());
+    return new TypeReference(context?.ID());
   }
 
 
