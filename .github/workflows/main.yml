@@ -54,7 +54,6 @@ jobs:
     steps:
     - name: Build .NET project
       run: |
-        echo "$PWD"
         ls
         dotnet build --configuration Release
 
