@@ -41,6 +41,7 @@ jobs:
 
     - name: Build C project
       run: |
+        cd ./RadLib
         cmake -H. -Bbuild
         cmake --build build
       
