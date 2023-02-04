@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Setup C project
+      uses: actions/setup-cmake@v1
+      with:
+        cmake-version: 3.23
+        
+    - name: Build C project
+      run: |
+        cmake -H. -Bbuild
+        cmake --build build
+
+    - name: Build .NET project
+      run: dotnet build --configuration Release
+
+    - name: Test .NET project
+      run: dotnet test --configuration Release
