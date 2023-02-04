@@ -54,7 +54,7 @@ jobs:
     steps:
     - name: Build .NET project
       run: |
-        ls
+        sudo apt install tree && git ls-tree -r --name-only HEAD | tree --fromfile
 
     - name: Test .NET project
       run: dotnet test --configuration Release
