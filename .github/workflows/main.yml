@@ -35,6 +35,9 @@ jobs:
         uses: egor-tensin/vs-shell@v2
         with:
           arch: x64
+          
+      - name: Set Up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Build C project Unix-like
         if: matrix.os != 'windows-latest'
