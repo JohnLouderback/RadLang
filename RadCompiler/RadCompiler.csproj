@@ -18,9 +18,10 @@
   </ItemGroup>
   <Target Name="Copy Runtime DLLs" AfterTargets="Build">
     <Message Text="Copying Runtime Support DLLs" Importance="High"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' != 'Windows_NT'"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' != 'Windows_NT'"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition=" &apos;$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))&apos; "/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.dylib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition=" &apos;$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))&apos; "/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="&apos;$(OS)&apos; == &apos;Unix&apos;"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="&apos;$(OS)&apos; == &apos;Windows_NT&apos;"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="&apos;$(OS)&apos; == &apos;Windows_NT&apos;"/>
   </Target>
 </Project>
