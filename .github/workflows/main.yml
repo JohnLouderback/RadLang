@@ -29,6 +29,12 @@ jobs:
           cmakeVersion: 3.24.0
           useCloudCache: ${{!env.ACT}} # Use the "cloud cache" when in the cloud.
           useLocalCache: ${{!!env.ACT}} # Use the local cache when running locally through `act`.
+          
+      - name: Set up Visual Studio shell
+        if: matrix.os == 'windows-latest'
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
 
       - name: Build C project Unix-like
         if: matrix.os != 'windows-latest'
