@@ -18,9 +18,9 @@
   </ItemGroup>
   <Target Name="Copy Runtime DLLs" AfterTargets="Build">
     <Message Text="Copying Runtime Support DLLs" Importance="High"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
-    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' != 'Windows_NT'"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' != 'Windows_NT'"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'"/>
+    <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'"/>
   </Target>
 </Project>
