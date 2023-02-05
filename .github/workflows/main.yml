@@ -22,7 +22,7 @@ jobs:
         with:
           cmakeVersion: 3.24.0
           useCloudCache: ${{!env.ACT}} # Use the "cloud cache" when in the cloud.
-          useLocalCache: ${{env.ACT}} # Use the local cache when running locally through `act`.
+          useLocalCache: ${{!!env.ACT}} # Use the local cache when running locally through `act`.
 
       - name: Build C project Unix-like
         run: |
