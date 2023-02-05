@@ -22,8 +22,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup C project
-        if: matrix.os != 'windows-latest'
+      - name: Install CMake
+        if: matrix.os != 'windows-latest' # Use the bundled CMake for Visual Studio on Windows.
         uses: lukka/get-cmake@v3.25.2
         with:
           cmakeVersion: 3.24.0
@@ -61,9 +61,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Remove Windows-only projects from the sln file
-        if: matrix.os != 'windows-latest'
-        run: |
+      - name: Remove MSVC projects from the sln file
+        run:
+          | # The Visual C++ projects are already built by CMake and only included in the .sln for debugging and development.
           perl -i -0pe 's/^.*? = "RadLib.*?\r?\nEndProject//gm' RadLang.sln
 
       - name: Build .NET project
