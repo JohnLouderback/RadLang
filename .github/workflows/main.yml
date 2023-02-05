@@ -13,6 +13,11 @@ env:
 jobs:
   build-project:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,10 +30,19 @@ jobs:
           useLocalCache: ${{!!env.ACT}} # Use the local cache when running locally through `act`.
 
       - name: Build C project Unix-like
+        if: matrix.os != 'windows-latest'
         run: |
           cd ./RadLib
           cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-unix/
           cmake --build cmake-build-unix/ --target RadLib RadLibStatic
+          cd ../
+
+      - name: Build C project Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd ./RadLib
+          cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-windows-x64/ -G "Visual Studio 17 2022"
+          cmake --build cmake-build-windows-x64/ --target RadLib RadLibStatic
           cd ../
 
       - name: Setup .NET Core SDK
@@ -37,6 +51,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Remove Windows-only projects from the sln file
+        if: matrix.os != 'windows-latest'
         run: |
           perl -i -0pe 's/^.*? = "RadLib.*?\r?\nEndProject//gm' RadLang.sln
 
