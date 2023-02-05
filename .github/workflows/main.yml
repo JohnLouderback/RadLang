@@ -30,15 +30,15 @@ jobs:
           useCloudCache: ${{!env.ACT}} # Use the "cloud cache" when in the cloud.
           useLocalCache: ${{!!env.ACT}} # Use the local cache when running locally through `act`.
 
-      - name: Set up Visual Studio shell
-        if: matrix.os == 'windows-latest'
-        uses: egor-tensin/vs-shell@v2
-        with:
-          arch: x64
+      #- name: Set up Visual Studio shell
+      #  if: matrix.os == 'windows-latest'
+      #  uses: egor-tensin/vs-shell@v2
+      #  with:
+      #    arch: x64
 
-      - name: Set Up MSVC
-        if: matrix.os == 'windows-latest'
-        uses: ilammy/msvc-dev-cmd@v1
+      #- name: Set Up MSVC
+      #  if: matrix.os == 'windows-latest'
+      #  uses: ilammy/msvc-dev-cmd@v1
 
       - name: Build C project Unix-like
         if: matrix.os != 'windows-latest'
