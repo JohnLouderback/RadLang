@@ -68,7 +68,7 @@ jobs:
           perl -i -0pe 's/^.*? = "RadLib.*?\r?\nEndProject//gm' RadLang.sln
 
       - name: Remove MSVC projects from the .sln file (Windows)
-        if: matrix.os != 'windows-latest'
+        if: matrix.os == 'windows-latest'
         run:
           | # The Visual C++ projects are already built by CMake and only included in the .sln for debugging and development.
           (Get-Content -Path './RadLang.sln' -Raw) -replace '(?m)^.*? = "RadLib.*?\r?\n?EndProject', '' | Set-Content -Path './RadLang.sln'
