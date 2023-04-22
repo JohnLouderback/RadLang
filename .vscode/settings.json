@@ -6,5 +6,6 @@
     "visitors": true,
     "outputDir": "./RadLexer/",
     "antlr4.referencesCodeLens.enabled": true
-}
+},
+"cmake.sourceDirectory": "${workspaceFolder}/RadLib"
 }

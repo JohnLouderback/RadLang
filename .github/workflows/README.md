@@ -4,16 +4,17 @@ Github Actions allow developers to automate their workflow and testing procedure
 In this guide, we will cover how to run Github Actions locally using the act binary in a Linux environment.
 
 ## Prerequisites
-* Linux operating system
+* Linux operating system (or WSL)
+
+## We'll Install These With This Guide
 * Docker
 * Github Personal Use Token
 * `act` binary installed
 
-## Steps
+## Install and First Run
 * Install Docker and run the daemon.
   * Install Docker, if you do not already have it:
     ```bash
-    curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash;
     sudo mkdir -p /etc/apt/keyrings;
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg;
     sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -41,7 +42,7 @@ In this guide, we will cover how to run Github Actions locally using the act bin
     ```bash
     curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
     ```
-  * Save the binary to a location on your system where it can be easily accessed, such as ~/bin/.
+  * Save the binary to a location on your system where it can be easily accessed, such as ~/bin/ or the project directory.
   * Make the binary executable by running the following command:
     ```bash
     sudo chmod +x ~/bin/act
@@ -49,12 +50,23 @@ In this guide, we will cover how to run Github Actions locally using the act bin
   * Navigate to your Github repository in the terminal.
   * Run the following command to run the Github Actions workflow locally:
     ```bash
-    sudo ./bin/act -s GITHUB_TOKEN=XXX -P ubuntu-latest=nektos/act-environments-ubuntu:18.04
+    sudo ./bin/act -s GITHUB_TOKEN=XXX -P ubuntu-latest=nektos/act-environments-ubuntu:18.04 --artifact-server-path /tmp/artifacts
     ```
   * Replace `XXX` with your Github token. The `-P` option specifies the runner environment. In
-  this case, ubuntu-latest is specified as `nektos/act-environments-ubuntu:18.04.`
+  this case, ubuntu-latest is specified as `nektos/act-environments-ubuntu:18.04`.
     * **Note:** This image is over _10 GB_, but contains most of the necessary binaries to emulate the CI.
   * Observe the output in the terminal to determine if the Github Actions workflow ran successfully.
+
+## Subsequent Runs
+* Make sure you're in the solution directory.
+* Ensure Docker is running. If it isn't, run:
+  ```bash
+  sudo dockerd&
+  ```
+* Run Act:
+  ```bash
+  sudo ./bin/act -s GITHUB_TOKEN=XXX -P ubuntu-latest=nektos/act-environments-ubuntu:18.04 --artifact-server-path /tmp/artifacts
+  ```
 
 ## Conclusion
 With these steps, you should be able to run Github Actions locally using the act binary in a Linux environment. This can be a valuable tool for testing Github Actions workflows before committing them to Github.
