@@ -37,8 +37,6 @@ public interface IBaseASTVisitor {
 
   void Visit(PositionalParameter node);
 
-  void Visit(PrimitiveTypeReference node);
-
   void Visit(Reference node);
 
   void Visit(ReferenceExpression node);

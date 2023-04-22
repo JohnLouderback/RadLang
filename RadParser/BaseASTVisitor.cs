@@ -182,6 +182,10 @@ public abstract class BaseASTVisitor : IBaseASTVisitor {
 
   public virtual void Visit(Identifier node) {}
 
+  public virtual void Visit(Token token) {}
+
+  public virtual void Visit(EmptyExpression emptyExpression) {}
+
 
   public void Visit(INode node) {
     Visit((dynamic)node);
