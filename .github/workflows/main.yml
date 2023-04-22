@@ -85,7 +85,7 @@ jobs:
         run: dotnet build ./RadLang.sln --configuration Release
 
       - name: Publish .NET project
-        run: dotnet publish ./RadLang.sln --configuration Release --self-contained true --runtime ${{ matrix.rid }} --framework net8.0 --output "./Rad/bin/Release/net8.0/${{ matrix.rid }}/publish" --produce-single-file --trim-unused-dependencies
+        run: dotnet publish ./RadLang.sln --configuration Release --self-contained true --runtime ${{ matrix.rid }} --framework net8.0 --output "./Rad/bin/Release/net8.0/${{ matrix.rid }}/publish"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
