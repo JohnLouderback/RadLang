@@ -30,13 +30,17 @@
     <ItemGroup>
         <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj"/>
     </ItemGroup>
+
     <!--    <ItemGroup>-->
     <!--        <RdXmlFile Include="RD.xml"/>-->
     <!--    </ItemGroup>-->
+
+    <!-- Configure the deployment paths for copying the runtime support DLLs. -->
     <ItemGroup>
         <DeployPath Include="$(OutDir)"/>
         <DeployPath Condition="'$(PublishDir)' != ''" Include="$(PublishDir)"/>
     </ItemGroup>
+    
     <!-- 
         Copy the correct runtime support DLLs to the output directory, depending on the target platform. There should be
         both a dynamic and a static library for each platform. The dynamic library is used for runtime linking, and the 

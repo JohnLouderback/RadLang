@@ -16,14 +16,19 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-22.04]
         include:
           - os: windows-latest
             rid: win-x64
           - os: macos-latest
             rid: osx-x64
-          - os: ubuntu-latest
-            rid: linux-x64
+          # We need the specific version on Ubuntu because the native `libLLVM` cannot otherwise be determined.
+          # If we used `linux-x64` instead, llvmSharp would have no way to determine which distro's `libLLVM` to use.
+          # Ubuntu 22.04 should provide us with a good balance of compatibility and stability. In the future, we may
+          # we may need to consider building with additional distros for other architectures and considerataions
+          # like `musl`.
+          - os: ubuntu-22.04
+            rid: ubuntu.22.04-x64
 
     steps:
       - name: Checkout code
