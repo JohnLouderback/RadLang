@@ -17,29 +17,17 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            rid: win-x64
+          - os: macos-latest
+            rid: osx-x64
+          - os: ubuntu-latest
+            rid: linux-x64
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set RuntimeIdentifier variable # Sets the RID variable to the appropriate value for the current OS.
-        run: |
-          case "${{ matrix.os }}" in
-            windows-latest)
-              export RID="win-x64"
-              ;;
-            macos-latest)
-              export RID="osx-x64"
-              ;;
-            ubuntu-latest)
-              export RID="linux-x64"
-              ;;
-            *)
-              echo "Unknown OS: ${{ matrix.os }}" >&2
-              exit 1
-              ;;
-          esac
-          echo "::set-env name=RID::$RID"
 
       - name: Install CMake
         if: matrix.os != 'windows-latest' # Use the bundled CMake for Visual Studio on Windows.
@@ -96,13 +84,13 @@ jobs:
         run: dotnet build ./RadLang.sln --configuration Release
 
       - name: Publish .NET project
-        run: dotnet publish ./RadLang.sln --configuration Release --self-contained true --runtime ${{ env.RID }} --framework net8.0 --output "./Rad/bin/Release/net8.0/${{ env.RID }}/publish" --produce-single-file --trim-unused-dependencies
+        run: dotnet publish ./RadLang.sln --configuration Release --self-contained true --runtime ${{ matrix.rid }} --framework net8.0 --output "./Rad/bin/Release/net8.0/${{ matrix.rid }}/publish" --produce-single-file --trim-unused-dependencies
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: rad-${{ env.RID }}-${{ github.sha }}
-          path: ./Rad/bin/Release/net8.0/${{ env.RID }}/publish
+          name: rad-${{ matrix.rid }}-${{ github.sha }}
+          path: ./Rad/bin/Release/net8.0/${{ matrix.rid }}/publish
 
       - name: Test .NET project
         run: dotnet test ./RadLang.sln --configuration Release
