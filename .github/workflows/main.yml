@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-18.04]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: windows-latest
             rid: win-x64
@@ -29,7 +29,7 @@ jobs:
           # 18.04 is the version supported by LLVM 14, the version we're currently using.
           # In the future, we may we may need to consider building with additional distros
           # for other architectures and considerataions like `musl`.
-          - os: ubuntu-18.04
+          - os: ubuntu-latest
             rid: ubuntu.18.04-x64
 
     steps:
