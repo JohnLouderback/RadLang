@@ -12,7 +12,7 @@
         <LangVersion>10</LangVersion>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <!--<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>-->
-        <PublishSingleFile Condition="'$(PublishProtocol)'!='' And '$(RuntimeIdentifier)' == ''">true</PublishSingleFile>
+        <PublishSingleFile>true</PublishSingleFile>
         <TrimMode>partial</TrimMode>
         <!--<PublishAot>true</PublishAot>-->
     </PropertyGroup>
@@ -33,6 +33,10 @@
     <!--    <ItemGroup>-->
     <!--        <RdXmlFile Include="RD.xml"/>-->
     <!--    </ItemGroup>-->
+    <ItemGroup>
+        <DeployPath Include="$(OutDir)"/>
+        <DeployPath Condition="'$(PublishDir)' != ''" Include="$(PublishDir)"/>
+    </ItemGroup>
     <!-- 
         Copy the correct runtime support DLLs to the output directory, depending on the target platform. There should be
         both a dynamic and a static library for each platform. The dynamic library is used for runtime linking, and the 
@@ -42,12 +46,9 @@
         is used to support certain primitive operations of the language's standard library, like printing to the console,
         reading from the console, timers, etc.
     -->
-    <Target Name="Copy Runtime DLLs" AfterTargets="Build;AfterPublish">
+    <Target Name="Copy Runtime DLLs" AfterTargets="Build;AfterPublish" Outputs="%(DeployPath.Identity)">
         <PropertyGroup>
-            <OutputDir>$(OutDir)</OutputDir>
-        </PropertyGroup>
-        <PropertyGroup Condition="'$(PublishDir)' != ''">
-            <OutputDir>$(PublishDir)</OutputDir>
+            <OutputDir>%(DeployPath.Identity)</OutputDir>
         </PropertyGroup>
         <Message Text="Copying Runtime Support DLLs" Importance="High"/>
         <!-- If we're on Linux copy the `libRadLib.so` runtime dynamic library file. -->

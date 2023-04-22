@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <!-- If a runtime identifier is not specified, default to win-x64. This is needed for restoring libLLVM packages. -->
@@ -20,9 +20,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RadCompiler\RadCompiler.csproj"/>
-        <ProjectReference Include="..\RadLexer\RadLexer.csproj"/>
-        <ProjectReference Include="..\RadParser\RadParser.csproj"/>
+        <ProjectReference Include="..\RadCompiler\RadCompiler.csproj" />
+        <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
+        <ProjectReference Include="..\RadParser\RadParser.csproj" />
     </ItemGroup>
 
 </Project>
