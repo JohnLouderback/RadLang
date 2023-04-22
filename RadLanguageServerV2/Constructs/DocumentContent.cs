@@ -4,6 +4,11 @@ using RadParser.AST.Node;
 
 namespace RadLanguageServerV2.Constructs;
 
+/// <summary>
+///   The <c> DocumentContent </c> class represents the content of a document. It contains the raw text
+///   of the document, the abstract syntax tree for the document, and any syntax errors found during
+///   lexing and parsing.
+/// </summary>
 public class DocumentContent {
   /// <summary>
   ///   The raw text of the document.
@@ -26,6 +31,8 @@ public class DocumentContent {
   public IEnumerable<SyntaxError> SyntaxErrors { get; private set; } = new List<SyntaxError>();
 
 
+  /// <inheritdoc cref="DocumentContent" />
+  /// <param name="text"> The text to set the document content to. </param>
   public DocumentContent(string text) {
     Text = text;
     AST  = GenerateAST();

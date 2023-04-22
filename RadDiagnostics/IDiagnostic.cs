@@ -2,6 +2,10 @@
 
 namespace RadDiagnostics;
 
+/// <summary>
+///   Represents a diagnostic message that can be used to report errors, warnings, or other
+///   information to the user.
+/// </summary>
 public interface IDiagnostic {
   /// <summary>
   ///   Represents the severity level of the diagnostic.

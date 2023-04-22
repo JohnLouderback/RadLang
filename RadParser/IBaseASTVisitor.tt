@@ -7,6 +7,10 @@
 
 namespace RadParser.AST.Node;
 
+/// <summary>
+/// An interface for a visitor that can visit all nodes in the AST. This interface is generated through a T4 template so
+/// that it can be kept up to date with the AST nodes without having to manually update it every time a new node is added.
+/// </summary>
 public interface IBaseASTVisitor {
 <#
     var path = "./AST/Node/";

@@ -64,8 +64,8 @@ public class RunCommand : Command<RunCommand.Settings> {
       var header = llvmResult.ResultType == LLVMResultType.Error
                      ? new Rule("[Red]Internal Compiler Error [/](╯’□’)╯︵ ┻━┻")
                      : new Rule(":partying_face:[Green] Success [/]:party_popper:");
-      header.Alignment = Justify.Left;
-      header.Border    = BoxBorder.Double;
+      header.Justification = Justify.Left;
+      header.Border        = BoxBorder.Double;
       AnsiConsole.Write(header);
       Console.ForegroundColor = llvmResult.ResultType == LLVMResultType.Error
                                   ? ConsoleColor.Red
@@ -77,8 +77,8 @@ public class RunCommand : Command<RunCommand.Settings> {
         Console.ForegroundColor = originalColor;
         AnsiConsole.Write(
             new Rule("[Blue]Details [/]:thinking_face:") {
-              Alignment = Justify.Left,
-              Border    = BoxBorder.Double
+              Justification = Justify.Left,
+              Border        = BoxBorder.Double
             }
           );
         Console.WriteLine("");

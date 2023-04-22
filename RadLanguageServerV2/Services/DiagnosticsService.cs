@@ -5,7 +5,8 @@ using RadTypeChecker;
 namespace RadLanguageServerV2.Services;
 
 /// <summary>
-///   The DiagnosticsService class is responsible for publishing diagnostics for a given document.
+///   The <c> DiagnosticsService </c> class is responsible for publishing diagnostics for a given
+///   document. Diagnostics may be syntax errors, type errors, etc.
 /// </summary>
 public class DiagnosticsService {
   private readonly LanguageServerService languageServerService;

@@ -5,25 +5,35 @@ using RadParser;
 using RadParser.AST.Node;
 using RadParser.Utils;
 
-namespace RadCompiler;
+namespace RadCompiler.CodeGen;
 
 public class CodeGenASTVisitor : BaseASTVisitor {
   private readonly LLVMModuleRef module;
 
   private readonly LLVMBuilderRef builder;
 
+  private readonly LLVMDIBuilderRef? debugInfoBuilder;
+
   private readonly LLVMContextRef context;
 
   /// <summary>
-  ///   A weak map of AST nodes and their associated LLVM values references.
+  ///   A weak map of AST nodes and their associated LLVM values references. This is useful to use
+  ///   when we only know the AST node, but need the LLVM value struct that was generated for it, for further code
+  ///   generation.
   /// </summary>
   public ConditionalWeakTable<INode, StrongBox<LLVMValueRef>> ASTValueMap { get; } = new();
 
 
-  public CodeGenASTVisitor(LLVMModuleRef module, LLVMBuilderRef builder, LLVMContextRef context) {
-    this.module  = module;
-    this.builder = builder;
-    this.context = context;
+  public CodeGenASTVisitor(
+    LLVMModuleRef module,
+    LLVMBuilderRef builder,
+    LLVMContextRef context,
+    LLVMDIBuilderRef? debugInfoBuilder = null
+  ) {
+    this.module           = module;
+    this.builder          = builder;
+    this.context          = context;
+    this.debugInfoBuilder = debugInfoBuilder;
   }
 
 
@@ -63,7 +73,6 @@ public class CodeGenASTVisitor : BaseASTVisitor {
             return llvmFunc.GetParam(
                 (uint)function.Parameters.FindIndex(
                     parameter =>
-
                       // Find the parameter in the function's param list that matches this param node.
                       parameter == param
                   )
@@ -143,7 +152,7 @@ public class CodeGenASTVisitor : BaseASTVisitor {
     var function = module.GetNamedFunction(node.Identifier.Name);
 
     // Function was not previously defined.
-    if (function.Handle == IntPtr.Zero) {
+    if (function.Handle == nint.Zero) {
       // Set up the parameters.
       var paramCount = (uint)node.Parameters.Count;
       var @params    = new LLVMTypeRef[paramCount];
@@ -262,7 +271,10 @@ public class CodeGenASTVisitor : BaseASTVisitor {
 
     // Determine statements
     foreach (var statement in node.AllStatements) {
+      // Visit and handle each statement.
       Visit(statement.Value as INode);
+      // Always reset the cursor to the end of the function body so if the cursor moves while
+      // visiting a statement, it can be moved back to the correct position at the end of the function body.
       builder.PositionAtEnd(functionBody);
     }
 

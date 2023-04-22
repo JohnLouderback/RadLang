@@ -2,6 +2,12 @@
 
 namespace RadLanguageServerV2.Constructs;
 
+/// <summary>
+///   The <c> SemanticTokensDocument </c> class represents the semantic tokens for a document. It
+///   contains the total length of the tokens, and the tokenized data representation of the tokens.
+///   It is useful for building up a document's semantic tokens incrementally while visiting the
+///   document's abstract syntax tree.
+/// </summary>
 public class SemanticTokensDocument {
   private int previousLine;
   private int previousColumn;

@@ -5,6 +5,11 @@ using Range = Microsoft.VisualStudio.LanguageServer.Protocol.Range;
 
 namespace RadLanguageServerV2.ASTVisitors;
 
+/// <summary>
+///   The <c> DocumentSymbolASTVisitor </c> class is an AST visitor that generates a document symbol
+///   hierarchy for a given abstract syntax tree. It visits relevant nodes in the AST and generates
+///   document symbols for each node.
+/// </summary>
 public class DocumentSymbolASTVisitor : BaseASTVisitor {
   private readonly Stack<IList<DocumentSymbol>> Parents = new();
   public DocumentSymbol RootSymbol { get; private set; }

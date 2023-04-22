@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using OneOf;
 using RadParser.AST.Node;
 using RadParser.Utils.Attributes;
@@ -79,7 +80,11 @@ public static class ASTUtils {
   /// <typeparam name="T"> The type of the AST node to start from. </typeparam>
   /// <returns> Returns the AST node passed in. </returns>
   /// <exception cref="Exception"> Throws an exception if the traversal fails. </exception>
-  public static T WalkAST<T>(T ast, Func<INode, INode, bool> callback) where T : class, INode {
+  public static T WalkAST<T>(
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+    T ast,
+    Func<INode, INode, bool> callback
+  ) where T : class, INode {
     // Get the type of the current node.
     var astNodeType = ast.GetType();
     var properties = astNodeType.GetProperties(
@@ -88,16 +93,16 @@ public static class ASTUtils {
 
     // Iterate over every property in this node and determine if it is a child node.
     foreach (var prop in properties) {
-      // Determines whether the property is annotated with `AncestoralAttribute`, indicating that
+      // Determines whether the property is annotated with `AncestralAttribute`, indicating that
       // the property is an ancestor node and we shouldn't walk it.
-      var hasAncestoralAttribute =
-        Attribute.GetCustomAttribute(prop, typeof(AncestoralAttribute)) is AncestoralAttribute;
+      var hasAncestralAttribute =
+        Attribute.GetCustomAttribute(prop, typeof(AncestralAttribute)) is AncestralAttribute;
       // Check if this is the `Parent` property so we can ignore it.
       var propIsParent = prop.Name == "Prop";
 
       // If this prop is an ancestor, we'll avoid checking it for nodes since they are likely circular.
       // Or if this prop is the "Parent" prop, don't follow it upwards.
-      if (hasAncestoralAttribute || propIsParent) continue;
+      if (hasAncestralAttribute || propIsParent) continue;
 
       // Get the value of this property and determine its type. It may be an `INode`, a list of nodes
       // or a `OneOf` type whose `.Value` property is a node.
@@ -112,7 +117,7 @@ public static class ASTUtils {
         new Lazy<bool>(
             () =>
               value is IEnumerable<object> oneOfList &&
-              oneOfList.Count() > 0 &&
+              oneOfList.Any() &&
               oneOfList.ToList()[0] is IOneOf oneOf &&
               oneOf.GetType()
                 .GetProperty
@@ -156,7 +161,11 @@ public static class ASTUtils {
 
         if (nodeList is null) {
           throw new Exception(
-              $"{nameof(nodeList)} could not converted to an {nameof(IEnumerable<INode>)} interface."
+              $"{
+                nameof(nodeList)
+              } could not converted to an {
+                nameof(IEnumerable<INode>)
+              } interface."
             );
         }
 

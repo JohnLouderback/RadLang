@@ -2,6 +2,10 @@
 
 namespace RadLanguageServerV2.Services;
 
+/// <summary>
+///   The <c> LanguageServerService </c> class is responsible for providing access to the language server
+///   from other services. It is a facade for the language server.
+/// </summary>
 public class LanguageServerService {
   private readonly LanguageServer languageServer;
 

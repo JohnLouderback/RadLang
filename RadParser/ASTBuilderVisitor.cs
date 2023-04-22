@@ -8,6 +8,11 @@ using Void = RadParser.AST.Node.Void;
 
 namespace RadParser;
 
+/// <summary>
+///   A visitor for visiting the CST and generating an AST. This is used to traverse the CST and
+///   generate a meaningful abstract syntax tree that glosses over the details of the concrete syntax
+///   tree, discarding unnecessary information such as meaningless tokens.
+/// </summary>
 public class ASTBuilderVisitor : RadBaseVisitor<INode> {
   public override INode Visit(IParseTree tree) {
     return base.Visit(tree);

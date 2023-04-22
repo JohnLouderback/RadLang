@@ -3,6 +3,11 @@ using RadUtils.Constructs;
 
 namespace RadParser.Utils;
 
+/// <summary>
+///   A collection of utilities for working with AST nodes. These general represent implementations
+///   of common operations that can be performed on AST nodes without the need for them existing as
+///   a part of a concrete AST node type.
+/// </summary>
 public static class ASTNodeExtensions {
   /// <summary>
   ///   Returns whether this node is located at the same position as the cursor given.

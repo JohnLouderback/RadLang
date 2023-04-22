@@ -99,6 +99,8 @@ public class LanguageServer {
   /// <summary>
   ///   Initializes and starts the language server.
   /// </summary>
+  /// <param name="input"> The input stream for the language server. </param>
+  /// <param name="output"> The output stream for the language server. </param>
   /// <returns> This instance of the <see cref="LanguageServer" />. </returns>
   public LanguageServer Start(Stream input, Stream output) {
     // Set up the tracing logging.
@@ -160,6 +162,12 @@ public class LanguageServer {
   }
 
 
+  /// <summary>
+  ///   Registers a service with the language server's dependency injection container. These services
+  ///   can be injected into request handlers.
+  /// </summary>
+  /// <typeparam name="TService"> The type of the service to register. </typeparam>
+  /// <returns> This instance of the <see cref="LanguageServer" />. </returns>
   public LanguageServer WithService<TService>() {
     container.Register<TService>(Reuse.Singleton);
     return this;

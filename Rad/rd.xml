@@ -1,5 +1,7 @@
-﻿<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
-  <Application>
-    <Assembly Name="Spectre.Console.Cli"/>
-  </Application>
+﻿<Directives xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata"
+            xsi:schemaLocation="http://schemas.microsoft.com/netfx/2013/01/metadata ">
+    <Application>
+        <Assembly Name="Spectre.Console.Cli" Dynamic="Required All" Browse="Require All" Activate="Require All"/>
+    </Application>
 </Directives>

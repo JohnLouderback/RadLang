@@ -6,8 +6,8 @@ namespace RadLanguageServerV2.LanguageServerEx.Models.InlayHint;
 
 /// <summary>
 ///   Inlay hint information.
-///   @since 3.17.0
 /// </summary>
+/// <since> 3.17.0 </since>
 [DataContract]
 public class InlayHint {
 	/// <summary>

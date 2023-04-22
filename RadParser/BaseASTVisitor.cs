@@ -3,6 +3,12 @@ using Void = RadParser.AST.Node.Void;
 
 namespace RadParser;
 
+/// <summary>
+///   A visitor for the AST. This is used to traverse the AST and perform operations on it. This
+///   abstract base class provides default implementations for all of the visit methods. This allows
+///   subclasses to only override the methods that they need to without losing the ability to
+///   traverse the AST for the other nodes.
+/// </summary>
 public abstract class BaseASTVisitor : IBaseASTVisitor {
   public virtual void Visit(OperationalKeyword node) {}
 

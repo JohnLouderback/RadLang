@@ -8,6 +8,11 @@ public static class StringExtensions {
   /// </summary>
   /// <param name="str"> The source string. </param>
   /// <returns> The source string in "camelCase" format. </returns>
+  /// <example>
+  ///   <code language="csharp">
+  ///     var camelCase = "PascalCase".PascalCaseToCamelCase(); // camelCase == "pascalCase"
+  ///   </code>
+  /// </example>
   public static string PascalCaseToCamelCase(this string str) {
     return str[0].ToString().ToLower() + str[1..];
   }
@@ -18,6 +23,11 @@ public static class StringExtensions {
   /// </summary>
   /// <param name="str"> The source string. </param>
   /// <returns> The source string in "Title case" format. </returns>
+  /// <example>
+  ///   <code language="csharp">
+  ///     var titleCase = "PascalCase".PascalCaseToTitleCase(); // titleCase == "Pascal Case"
+  ///   </code>
+  /// </example>
   public static string PascalCaseToTitleCase(this string str) {
     var newStr = new StringBuilder();
 

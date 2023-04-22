@@ -13,8 +13,8 @@ using StreamJsonRpc;
 namespace RadLanguageServerV2;
 
 /// <summary>
-///   The LanguageRPCServer is the actual JSON RPC server which handle incoming requests, delegates them to the broader
-///   language server, and finally returns the appropriate response.
+///   The LanguageRPCServer is the actual JSON RPC server which handles incoming requests, delegates
+///   them to the broader language server, and finally returns the appropriate response.
 /// </summary>
 public class LanguageRPCServer {
   private readonly LanguageServer server;
