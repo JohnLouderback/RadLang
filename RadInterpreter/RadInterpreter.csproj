@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <!-- If a runtime identifier is not specified, default to win-x64. This is needed for restoring libLLVM packages. -->
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
-        <LangVersion>10</LangVersion>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

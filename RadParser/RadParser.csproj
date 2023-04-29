@@ -1,35 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>11</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
-    <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RadLexer\RadLexer.csproj"/>
+        <ProjectReference Include="..\RadUtils\RadUtils.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="OneOf" Version="3.0.223" />
-    <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="OneOf" Version="3.0.223"/>
+        <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Update="IBaseASTVisitor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IBaseASTVisitor.g.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="IBaseASTVisitor.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>IBaseASTVisitor.g.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="IBaseASTVisitor.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IBaseASTVisitor.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="IBaseASTVisitor.g.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>IBaseASTVisitor.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
 </Project>

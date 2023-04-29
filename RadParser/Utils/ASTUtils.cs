@@ -161,11 +161,7 @@ public static class ASTUtils {
 
         if (nodeList is null) {
           throw new Exception(
-              $"{
-                nameof(nodeList)
-              } could not converted to an {
-                nameof(IEnumerable<INode>)
-              } interface."
+              $"{nameof(nodeList)} could not converted to an {nameof(IEnumerable<INode>)} interface."
             );
         }
 

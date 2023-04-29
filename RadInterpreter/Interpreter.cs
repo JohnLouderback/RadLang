@@ -17,7 +17,7 @@ public class Interpreter {
   /// <summary>
   ///   The `Status` event is used to send status updates to subscribers.
   /// </summary>
-  public event Compiler.CompilerEventHandler Status;
+  public event CompilerEventHandler Status;
 
 
   /// <summary>

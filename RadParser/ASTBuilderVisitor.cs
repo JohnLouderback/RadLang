@@ -286,9 +286,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
                                  declCtx
                                ),
                              _ => throw new Exception(
-                                      $"Top-level statement was not of a known context type. Got: {
-                                        child.GetType().Name
-                                      }"
+                                      $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
                                     )
                            };
 
@@ -325,9 +323,7 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
             Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
             Rad.DeclarationContext declCtx            => VisitDeclaration(declCtx),
             _ => throw new Exception(
-                     $"Top-level statement was not of a known context type. Got: {
-                       child.GetType().Name
-                     }"
+                     $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
                    )
           };
 

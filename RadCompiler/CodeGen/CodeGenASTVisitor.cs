@@ -17,6 +17,13 @@ public class CodeGenASTVisitor : BaseASTVisitor {
   private readonly LLVMContextRef context;
 
   /// <summary>
+  ///   A reference to the top-level function of the root module. This is used to make the pointer
+  ///   to the main function so that the JIT can find it and we can run the program as a script
+  ///   rather than compiling it to an executable.
+  /// </summary>
+  public LLVMValueRef MainFunction { get; set; }
+
+  /// <summary>
   ///   A weak map of AST nodes and their associated LLVM values references. This is useful to use
   ///   when we only know the AST node, but need the LLVM value struct that was generated for it, for further code
   ///   generation.
@@ -300,6 +307,6 @@ public class CodeGenASTVisitor : BaseASTVisitor {
         );
     }
 
-    Compiler.MainFunction = function;
+    MainFunction = function;
   }
 }
