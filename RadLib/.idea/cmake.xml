@@ -4,6 +4,7 @@
     <configurations>
       <configuration PROFILE_NAME="Debug Unix" ENABLED="true" GENERATION_DIR="cmake-build-unix" CONFIG_NAME="Debug" TOOLCHAIN_NAME="WSL" GENERATION_OPTIONS="-D BUILDING_DLL=1" />
       <configuration PROFILE_NAME="Debug Windows x64" ENABLED="true" GENERATION_DIR="cmake-build-windows-x64" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio x64" GENERATION_OPTIONS="-G &quot;Visual Studio 17 2022&quot; -D BUILDING_DLL=1" />
+      <configuration PROFILE_NAME="Debug MinGW Emscripten" ENABLED="true" GENERATION_DIR="cmake-build-emscripten" CONFIG_NAME="Debug" TOOLCHAIN_NAME="MinGW for Emscripten" GENERATION_OPTIONS="-D BUILDING_DLL=1" NO_GENERATOR="true" />
     </configurations>
   </component>
 </project>

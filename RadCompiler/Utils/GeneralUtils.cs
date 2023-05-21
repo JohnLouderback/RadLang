@@ -23,17 +23,6 @@ public static class GeneralUtils {
 
 
   /// <summary>
-  ///   Obtains the path to the currently running executable - whatever application is including the
-  ///   compiler library.
-  /// </summary>
-  /// <returns> A string of the path to the currently running executable. </returns>
-  public static string GetApplicationDirectory() {
-    var strExeFilePath = AppContext.BaseDirectory; //Assembly.GetExecutingAssembly().Location;
-    return Path.GetDirectoryName(strExeFilePath);
-  }
-
-
-  /// <summary>
   ///   Gets the correct dynamic runtime library for the current platform. The dynamic runtime
   ///   library is the library that contains important "helper" functions that can be loaded into
   ///   this assembly for running Rad code as a script.

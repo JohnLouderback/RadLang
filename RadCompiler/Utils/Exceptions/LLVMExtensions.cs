@@ -10,20 +10,26 @@ public static class LLVMExtensions {
     LLVMValueRef value
   ) {
     var          printf      = module.GetNamedFunction("printf");
-    var          printIntStr = builder.BuildGlobalStringPtr("%i\n", "str");
+    var          printIntStr = builder.BuildGlobalStringPtr("%d\n", "str");
     LLVMValueRef str;
 
     if (value.TypeOf == LLVMTypeRef.Int32) {
       str = printIntStr;
     }
     else {
-      throw new Exception("Could not determine the typeof of argument to \"printf\".");
+      throw new ArgumentException(
+          $"Could not determine the typeof of the \"{nameof(value)}\" argument to \"printf\"."
+        );
     }
 
     return builder.BuildCall(
         printf,
         new[] {
-          str,
+          // It is necessary to cast the string to a pointer to an array of i8 (char). This is
+          // because LLVM does not have a string type, so we must use a pointer to an array of
+          // i8 instead. Without this cast, the compiler will throw an exception because the type
+          // would be incorrect for the call to "printf".
+          LLVMValueRef.CreateConstBitCast(str, LLVMTypeRef.CreatePointer(LLVMTypeRef.Int8, 0)),
           value
         }
       );

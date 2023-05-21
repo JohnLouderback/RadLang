@@ -1,0 +1,21 @@
+// TS Config File
+// https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+// https://www.typescriptlang.org/docs/handbook/compiler-options.html
+{
+  "extends": "@sindresorhus/tsconfig",
+  // Compiler options configured for Node and CommonJS
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
+    "paths": {
+      "@tweenjs/tween.js": ["./node_modules/@tweenjs/tween.js/dist/tween.d.ts"]
+    }
+  },
+  "include": ["scripts/**/*"],
+  "ts-node": {
+		"transpileOnly": true,
+		"files": true,
+		"experimentalResolver": true,
+		"experimentalSpecifierResolution": "node"
+	}
+}

@@ -29,6 +29,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj" />
+        <ProjectReference Include="..\RadProject\RadProject.csproj" />
     </ItemGroup>
 
     <!--    <ItemGroup>-->

@@ -85,7 +85,9 @@ public static class LogoPrinter {
         currentXColor.b = (currentXColor.b - bXIncrement + 255) % 255;
 
         logoString.Append(
-            $"[rgb{Regex.Replace(currentXColor.ToString(), @"\s|(\.\d+)", "")}]{Markup.Escape($"{character}")}[/]"
+            character == ' '
+              ? character
+              : $"[rgb{Regex.Replace(currentXColor.ToString(), @"\s|(\.\d+)", "")}]{Markup.Escape($"{character}")}[/]"
           );
       }
 

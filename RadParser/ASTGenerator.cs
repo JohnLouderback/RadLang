@@ -1,4 +1,5 @@
-﻿using RadLexer;
+﻿using Antlr4.Runtime;
+using RadLexer;
 using RadParser.AST.Node;
 using RadParser.Utils;
 
@@ -23,5 +24,40 @@ public class ASTGenerator {
     // Visit the CST and generate an AST, then find all node that do not have parents assigned and
     // assign them parents by walking the tree.
     return ASTUtils.Ophanarium(new ASTBuilderVisitor().VisitStartRule(cst));
+  }
+
+
+  /// <summary>
+  ///   Given an input Rad source file, this method will parse the file and generate an AST from it.
+  /// </summary>
+  /// <param name="file"> The file to parse. </param>
+  /// <returns> The Abstract Syntax Tree representing the file. </returns>
+  public Module ParseFile(FileInfo file) {
+    // Get the input stream from the file path provided.
+    var inputStream = new AntlrInputStream(
+        file.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+      );
+
+    // Create a lexer based on the input stream.
+    var lexer = new RadLexer.RadLexer(inputStream);
+
+    // Tokenize the file and get the token stream from the lexer.
+    var tokenStream = new CommonTokenStream(lexer);
+
+    // Create a token parser.
+    var parser = new Rad(tokenStream);
+
+    parser.AddErrorListener(new SyntaxErrorListener());
+    parser.ErrorHandler = new SyntaxErrorStrategy();
+
+    // Parse the tokens to generate the "Concrete Syntax Tree".
+    var cst = parser.startRule();
+    return GenerateASTFromCST(cst);
+  }
+
+
+  /// <inheritdoc cref="ASTGenerator.ParseFile(System.IO.FileInfo)" />
+  public Module ParseFile(string filePath) {
+    return ParseFile(new FileInfo(filePath));
   }
 }

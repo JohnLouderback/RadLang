@@ -3,6 +3,7 @@ using LLVMSharp.Interop;
 using RadCompiler.Utils;
 using RadParser.AST.Node;
 using static RadCompiler.Utils.GeneralUtils;
+using static RadUtils.DirectoryUtils;
 
 namespace RadCompiler;
 
@@ -74,7 +75,9 @@ public class Script : Executable, IExecutable {
       throw new LLVMResult(
           LLVMResultType.Error,
           () => Console.WriteLine(
-              $"Error loading runtime helper library \"{Path.Combine(GetApplicationDirectory(), dynRuntimeLib)}\"."
+              $"Error loading runtime helper library \"{
+                Path.Combine(GetApplicationDirectory(), dynRuntimeLib)
+              }\"."
             )
         );
     }

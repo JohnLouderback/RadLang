@@ -70,6 +70,29 @@ jobs:
           cmake --build cmake-build-windows-x64/ --target RadLib RadLibStatic --config Release
           cd ../
 
+      # Setup Emscripten so we can build the WebAssembly version of the library.
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v11
+        with:
+          # Make sure to set a version number!
+          version: 1.38.40
+          # This is the name of the cache folder.
+          # The cache folder will be placed in the build directory,
+          #  so make sure it doesn't conflict with anything!
+          actions-cache-folder: 'emsdk-cache'
+
+      # Ensure that the Emscripten environment is set up correctly.
+      - name: Verify
+        run: emcc -v
+
+      # Build the Emscripten version of the library.
+      - name: Build C project Emscripten
+        run: |
+          cd ./RadLib
+          emcmake cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-emscripten/
+          cmake --build cmake-build-unix/ --target RadLibStatic --config Release
+          cd ../
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v2
         with:

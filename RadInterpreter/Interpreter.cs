@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using RadCompiler;
+using RadCompiler.Utils;
 using RadLexer;
 using RadParser;
 
@@ -24,7 +25,7 @@ public class Interpreter {
   ///   Given an input file path, this method will parse and execute the code in the file.
   /// </summary>
   /// <param name="filePath"> The path to the file to interpret. </param>
-  public void InterpretFile(string filePath) {
+  public LLVMResult InterpretFile(string filePath) {
     // Get the input stream from the file path provided.
     var inputStream = new AntlrInputStream(
         File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
@@ -47,6 +48,6 @@ public class Interpreter {
     var ast      = new ASTGenerator().GenerateASTFromCST(cst);
     var compiler = new Compiler();
     compiler.Status += (sender, args) => { Status?.Invoke(sender, args); };
-    compiler.Compile(ast);
+    return compiler.Compile(ast);
   }
 }

@@ -1,50 +1,42 @@
-﻿using Rad.Utils;
+﻿using Rad.Components;
+using Rad.Utils;
+using RadCompiler;
 using RadCompiler.Utils;
-using RadInterpreter;
+using RadProject;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Rad.Commands;
 
-public class RunCommand : Command<RunCommand.Settings> {
-  public override int Execute(CommandContext context, Settings settings) {
+public class RunCommand : AsyncCommand<RunCommand.Settings> {
+  public override async Task<int> ExecuteAsync(CommandContext context, Settings settings) {
     LogoPrinter.Print();
 
-    var path = new TextPath(Emoji.Replace(":page_facing_up: ") + settings.File)
-      .LeafColor(Color.Blue)
-      .StemStyle(new Style(null, null, Decoration.Dim))
-      .RootStyle(new Style(null, null, Decoration.Dim))
-      .SeparatorStyle(new Style(null, null, Decoration.Dim));
-
-    var panel = new Panel(path) {
-      Header = new PanelHeader("Compiling File:", Justify.Left),
-      Border = BoxBorder.Rounded,
-      Expand = false
-    };
-    panel.BorderColor(Color.Blue);
+    var panel = new FilePanel(settings.File);
 
     var         status     = 0;
     LLVMResult? llvmResult = default;
 
-    AnsiConsole.Status()
-      .Spinner(Spinner.Known.Arrow3)
-      .SpinnerStyle(Style.Parse("green"))
-      .Start(
+    // Build the script is a separate thread so that we can display the build status in the console
+    // then return the script to the main thread to execute in.
+    var script =
+      await TaskRunner.Run(
           "Running...",
           async ctx => {
             AnsiConsole.Write(panel);
             try {
-              var interpreter = new Interpreter();
-              interpreter.Status += (sender, args) => {
+              var script = new Script();
+              script.BuildStatus += (sender, args) => {
                 AnsiConsole.WriteLine(args.Message + " " + args.Details);
               };
-              interpreter.InterpretFile(settings.File);
+              script.Build(Project.FromEntryPoint(settings.File));
+              return script;
             }
             catch (Exception e) {
               if (e is LLVMResult result) {
                 llvmResult = result;
                 status     = llvmResult.ResultType == LLVMResultType.Error ? -1 : 0;
-                return;
+                return null;
               }
 
               AnsiConsole.WriteException(
@@ -52,49 +44,25 @@ public class RunCommand : Command<RunCommand.Settings> {
                   ExceptionFormats.ShortenMethods | ExceptionFormats.ShowLinks
                 );
               status = -1;
-              return;
+              return null;
             }
-
-            ctx.Refresh();
           }
         );
 
+    // If we have an LLVM result, then we should log it. This may indicate either issues with the
+    // script or issues with the compiler.
     if (llvmResult is not null) {
-      var originalColor = Console.ForegroundColor;
-      var header = llvmResult.ResultType == LLVMResultType.Error
-                     ? new Rule("[Red]Internal Compiler Error [/](╯’□’)╯︵ ┻━┻")
-                     : new Rule(":partying_face:[Green] Success [/]:party_popper:");
-      header.Justification = Justify.Left;
-      header.Border        = BoxBorder.Double;
-      AnsiConsole.Write(header);
-      Console.ForegroundColor = llvmResult.ResultType == LLVMResultType.Error
-                                  ? ConsoleColor.Red
-                                  : ConsoleColor.Green;
-      llvmResult.GetMessage();
-
-      // If there are any specifics, dump them now.
-      if (llvmResult.GetDetails is not null) {
-        Console.ForegroundColor = originalColor;
-        AnsiConsole.Write(
-            new Rule("[Blue]Details [/]:thinking_face:") {
-              Justification = Justify.Left,
-              Border        = BoxBorder.Double
-            }
-          );
-        Console.WriteLine("");
-        Console.ForegroundColor = ConsoleColor.Blue;
-        llvmResult.GetDetails();
-        Console.WriteLine("");
-      }
-
-      Console.ForegroundColor = originalColor;
-      AnsiConsole.Write(
-          new Rule {
-            Border = BoxBorder.Double
-          }
-        );
-      Console.WriteLine("");
+      Logging.LLVMResult(llvmResult);
     }
+
+    // If the script is null, then we encountered an error while building the script. We should
+    // return the status code of the error.
+    if (script is null) {
+      return status;
+    }
+
+    // If the script is not null, then we can run it now. The script will output to stdout.
+    script.Run();
 
     return status;
   }

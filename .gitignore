@@ -600,3 +600,8 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,visualstudio,visualstudiocode,cmake,clion
+
+# Ignore our `.support` directory as it is only used for third party tools like
+# emscripten that we don't want to commit to our repo but can be programmatically
+# added to the project by running our initialization scripts.
+.support/

@@ -1,9 +1,42 @@
-﻿namespace RadUtils;
+﻿using System.Reflection;
+
+namespace RadUtils;
 
 /// <summary>
 ///   Extension methods which apply to all objects.
 /// </summary>
 public static class ObjectExtensions {
+  /// <summary>
+  ///   Calls a private method on an object. A dangerous, but occasionally useful tool.
+  /// </summary>
+  /// <param name="obj"> The object to call the method on. </param>
+  /// <param name="methodName">
+  ///   The name of the method to call. This may only be a <c> private </c> or <c> protected </c>
+  ///   member of the object.
+  /// </param>
+  /// <param name="args"> The arguments to pass to the method. </param>
+  /// <returns> The return value of the method. </returns>
+  /// <exception cref="InvalidOperationException"> Thrown if the method does not exist. </exception>
+  public static object? Call(this object obj, string methodName, params object[] args) {
+    var methodInfo =
+      obj.GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+    if (methodInfo == null) {
+      throw new InvalidOperationException(
+          $"Method \"{methodName}\" was not found on class \"{obj.GetType().Name}\"."
+        );
+    }
+
+    return methodInfo?.Invoke(obj, args);
+  }
+
+
+  /// <inheritdoc cref="ObjectExtensions.Call" />
+  /// <typeparam name="T"> The return type of the method. </typeparam>
+  public static T Call<T>(this object obj, string methodName, params object[] args) {
+    return (T)obj.Call(methodName, args);
+  }
+
+
   /// <summary>
   ///   Checks to see if the object has a property with the given name.
   /// </summary>

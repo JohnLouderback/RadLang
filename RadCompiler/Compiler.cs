@@ -22,15 +22,14 @@ public class Compiler {
   /// <param name="ast">
   ///   The abstract syntax tree to use as the entry point for code generation.
   /// </param>
+  /// <returns>
+  ///   An <see cref="LLVMResult"> LLVMResult </see> object containing the result of the compilation.
+  /// </returns>
   /// <exception cref="LLVMResult">
-  ///   Rather than return a value, this method will always throw an exception. The exception will
-  ///   contain the result of the compilation process, which can be used to determine whether or not
-  ///   the compilation was successful. This is done because LLVM outputs results to stdout and we
-  ///   don't want to clutter the console with LLVM's output and instead want to handle it ourselves.
-  ///   To this end, the exception is used as control flow mechanism to return to the caller that
-  ///   should handle the result.
+  ///   LLVM Result when the compilation fails due to underlying LLVM errors. This indicates an
+  ///   issue with the compiler itself rather than the code being compiled.
   /// </exception>
-  public void Compile(Module ast) {
+  public LLVMResult Compile(Module ast) {
     var script = new Script();
 
     void StatusListener(object sender, CompilerEventArgs args) =>
@@ -46,7 +45,7 @@ public class Compiler {
 
     // If the compilation was successful, run the code and use the code's output as the message to
     // log to the console.
-    throw new LLVMResult(
+    return new LLVMResult(
         LLVMResultType.Success,
         () => {
           // Bind the run status listener and forward the event to any subscribers.

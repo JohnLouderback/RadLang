@@ -247,7 +247,8 @@ public class CodeGenASTVisitor : BaseASTVisitor {
     var printf = module.DeclareFunction(
         "printf",
         LLVMTypeRef.Int32,
-        Array.Empty<LLVMTypeRef>(),
+        // Defines the first argument of `printf` as a pointer to a char array - a string. 
+        new[] { LLVMTypeRef.CreatePointer(LLVMTypeRef.Int8, 0) },
         true
       );
 

@@ -1,0 +1,45 @@
+{
+  "name": "rad-lang",
+  "version": "0.0.0",
+  "description": "Codebase for the Rad programming language project.",
+  "main": "index.js",
+  "repository": "https://github.com/JohnLouderback/RadLang.git",
+  "author": "John Louderback <john@powereddynamics.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "init-repo": "cross-env DEV=true ts-node-esm ./scripts/index.tsx"
+  },
+  "dependencies": {
+    "@inkjs/ui": "^1.0.0",
+    "@tweenjs/tween.js": "christjt/tween.js#020232d",
+    "@types/adm-zip": "^0.5.0",
+    "@types/ink-gradient": "^2.0.1",
+    "adm-zip": "^0.5.10",
+    "cli-spinners": "^2.9.0",
+    "ink": "^4.2.0",
+    "ink-color-pipe": "^3.0.0",
+    "ink-gradient": "^2.0.0",
+    "ink-select-input": "^5.0.0",
+    "ink-task-list": "^2.0.0",
+    "ink-use-stdout-dimensions": "^1.0.5",
+    "mobx": "^6.9.0",
+    "mobx-react-lite": "^3.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "term-size": "^3.0.2",
+    "window-size": "^1.1.1"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^3.0.1",
+    "@types/ink": "^2.0.3",
+    "@types/node": "^20.1.0",
+    "@types/react": "^18.2.6",
+    "cross-env": "^7.0.3",
+    "ink-spinner": "^5.0.0",
+    "react-devtools": "^4.27.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

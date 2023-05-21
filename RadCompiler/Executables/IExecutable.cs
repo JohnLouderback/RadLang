@@ -1,5 +1,6 @@
 ﻿using LLVMSharp.Interop;
 using RadParser.AST.Node;
+using RadProject;
 
 namespace RadCompiler;
 
@@ -32,6 +33,18 @@ public interface IExecutable {
   ///   The <see cref="LLVMValueRef" /> of the entry point of the program – the main function.
   /// </returns>
   LLVMValueRef Build(Module ast);
+
+
+  /// <summary>
+  ///   Builds the "executable" from a Rad project.
+  /// </summary>
+  /// <param name="project">
+  ///   The Rad project containing the entry-point source file to build the executable from.
+  /// </param>
+  /// <returns>
+  ///   The <see cref="LLVMValueRef" /> of the entry point of the program – the main function.
+  /// </returns>
+  LLVMValueRef Build(Project project);
 
 
   /// <summary>

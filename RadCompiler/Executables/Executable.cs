@@ -3,6 +3,7 @@ using LLVMSharp.Interop;
 using RadCompiler.CodeGen;
 using RadCompiler.Utils;
 using RadParser.AST.Node;
+using RadProject;
 using static RadCompiler.Utils.GeneralUtils;
 
 namespace RadCompiler;
@@ -72,6 +73,11 @@ public abstract class Executable : IExecutable {
     }
 
     return codeGenerator.MainFunction;
+  }
+
+
+  public virtual LLVMValueRef Build(Project project) {
+    return Build(project.EntryPoint);
   }
 
 
