@@ -1,4 +1,6 @@
-<img src="./Rad/rad-icon.png" style="display: block; margin: 0 auto; max-width: 350px">
+<p align="center">
+  <img src="./Rad/rad-icon.png" width="350">
+</p>
 
 # The Rad Programming Language
 

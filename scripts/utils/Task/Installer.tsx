@@ -25,6 +25,12 @@ interface IInstallerProps {
    * The main task representing the installation.
    */
   task: ITaskConstructor;
+  /**
+   * Specifies if the CLI was run in non-interactive mode. Defaults to `false`. However,
+   * if either the output is not TTY (such as when it is redirected) or the `CI` environment
+   * variable is set, then this value will be overridden to `true`.
+   */
+  nonInteractive?: boolean;
 }
 
 /**
@@ -74,7 +80,7 @@ export const Installer: FC<IInstallerProps> = observer(
       // When the last message to be logged changes, update the last message. In
       // non-interactive terminals (e.g. CI environments), this will be used to render the
       // last logged message to the terminal.
-      autorun(() => {
+      return autorun(() => {
         // If the terminal is interactive, then don't do anything.
         if (isInteractive) return;
 
