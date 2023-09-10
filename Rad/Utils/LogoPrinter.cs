@@ -5,7 +5,7 @@ using Spectre.Console;
 namespace Rad.Utils;
 
 public static class LogoPrinter {
-  private static readonly string logo = @"
+  private const string logo = @"
                                 i(\lj](:                                            
                        i((cRg#&D@@@@@@@%wkv                                         
                     {/|WM%@@@@@@@@@@@@@@@@@E:                                       
