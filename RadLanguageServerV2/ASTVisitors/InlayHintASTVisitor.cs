@@ -17,7 +17,7 @@ public class InlayHintASTVisitor : BaseASTVisitor {
       foreach (var argument in node.Arguments) {
         // If the number of arguments is greater than the number of defined parameters, break of of the loop.
         // This can happen when a syntax error affects a function signature.
-        if (funcDecl.Parameters.Count - 1 <= argIndex) break;
+        if (funcDecl.Parameters.Count - 1 < argIndex) break;
 
         InlayHints.Add(
             new InlayHint {
