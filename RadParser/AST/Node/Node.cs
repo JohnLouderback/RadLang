@@ -4,6 +4,10 @@ using RadUtils.Constructs;
 
 namespace RadParser.AST.Node;
 
+/// <summary>
+///   Represents a node in the AST.
+/// </summary>
+/// <typeparam name="T"> The type of the children for this node. </typeparam>
 public abstract class Node<T> : INode {
   private static int LastKnownLineNumber = 1;
   private static int LastKnownColumnNumber;
@@ -55,7 +59,7 @@ public abstract class Node<T> : INode {
   public ParserRuleContext? CSTNode { get; internal set; }
 
 
-  public Node(ParserRuleContext context) {
+  public Node(ParserRuleContext? context) {
     // Context being `null` usually indicates a syntax error. We try to recover as well as we can.
     if (context is null) {
       Text    = "";

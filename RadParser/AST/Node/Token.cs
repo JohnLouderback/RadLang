@@ -1,24 +1,21 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime.Tree;
 
 namespace RadParser.AST.Node;
 
 /// <summary>
-///   Represents a concrete token for information purposes. For instance, a colon in a type specifier might be useful for
-///   syntax highlighting while serving no greater abstract purpose.
+///   <para>
+///     Represents a concrete token for information purposes. For instance, a colon in a type
+///     specifier might be useful for syntax highlighting while serving no greater abstract purpose.
+///     In the line: <c> var x: int = 5; </c>, the colon is a token that serves no other purpose other
+///     than syntax.
+///   </para>
+///   <para>
+///     This class isn't to be confused with <see cref="TokenNode" />, which is an abstract base
+///     class to be used by all node which are backed by a single terminal token. This class is
+///     instead used specifically for tokens that serve no greater purpose other than syntax.
+///   </para>
 /// </summary>
-public class Token : Node<INode> {
-  public Token(ITerminalNode tokenNode) : base(
-      tokenNode?.Parent?.RuleContext as ParserRuleContext
-    ) {
-    // A syntax error may cause the token to be omitted - make sure it is not null. If it is null,
-    // the base constructor will handle the fallback behavior.
-    if (tokenNode is null) return;
-
-    var token = tokenNode.Payload as IToken;
-    Text   = tokenNode.GetText();
-    Line   = token.Line;
-    Column = token.Column;
-    Width  = Text.Length;
-  }
+/// <inheritdoc />
+public class Token : TokenNode {
+  public Token(ITerminalNode tokenNode) : base(tokenNode) {}
 }

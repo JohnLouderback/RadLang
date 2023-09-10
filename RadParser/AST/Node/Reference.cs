@@ -6,16 +6,27 @@ using RadParser.Utils.Attributes;
 
 namespace RadParser.AST.Node; 
 
-public class Reference : Node<INode>, IReference<Identifier>, IPossibleConstant {
-  public virtual Identifier Identifier { get; set; }
+/// <summary>
+///   <para>
+///     Represents a reference to a declaration in the source code. For example, in the code:
+///     <code>
+///       var x = 5;
+///       x += 5;
+///     </code>
+///     <c> x </c> in the second line is a reference to the declaration of <c> x </c> in the first
+///     line.
+///   </para>
+///
+///   <para>
+///     To find the declaration that this <see cref="Reference" /> refers to, use the
+///     <see cref="ASTNodeExtensions.GetDeclaration{T}(IReference{T})" /> extension method.
+///   </para>
+/// </summary>
+public class Reference : TokenNode, IReference<Identifier>, IPossibleConstant {
+  /// <inheritdoc />
+  public virtual required Identifier Identifier { get; init; }
 
-  public Reference(ITerminalNode tokenNode) : base(tokenNode.Parent.RuleContext as ParserRuleContext) {
-    var token = tokenNode.Payload as IToken;
-    Text = tokenNode.GetText();
-    Line = token.Line;
-    Column = token.Column;
-    Width = Text.Length;
-  }
+  public Reference(ITerminalNode tokenNode) : base(tokenNode) {}
 
 
   /// <inheritdoc />

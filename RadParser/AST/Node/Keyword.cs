@@ -3,16 +3,15 @@ using Antlr4.Runtime.Tree;
 
 namespace RadParser.AST.Node;
 
-public abstract class Keyword : Node<INode> {
+/// <summary>
+///   Represents a keyword in the source code. For example, in the line <c> var x = 5; </c>,
+///   <c> var </c> is a keyword.
+/// </summary>
+/// <inheritdoc />
+public abstract class Keyword : TokenNode {
   public Keyword(ParserRuleContext context) : base(context) {}
 
 
-  public Keyword(ITerminalNode tokenNode) :
-    base(tokenNode.Parent.RuleContext as ParserRuleContext) {
-    var token = tokenNode.Payload as IToken;
-    Text   = tokenNode.GetText();
-    Line   = token.Line;
-    Column = token.Column;
-    Width  = Text.Length;
-  }
+  public Keyword(ITerminalNode? tokenNode) :
+    base(tokenNode) {}
 }

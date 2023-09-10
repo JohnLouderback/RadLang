@@ -7,18 +7,18 @@ public enum ModifierType {
   Unsigned
 }
 
-public class Modifier : Node<INode> {
+/// <summary>
+///   Represents a modifier in the source code. For example, in the line
+///   <c> var x: unsigned int = 5; </c>, <c> unsigned </c> is a modifier for the type <c> int </c>.
+///   A modifier modifies a type or keyword, generally augmenting it in some way.
+/// </summary>
+/// <inheritdoc />
+public class Modifier : TokenNode {
   public ModifierType Type { get; internal set; }
 
   public Modifier(ParserRuleContext context) : base(context) {}
 
 
-  public Modifier(ITerminalNode tokenNode) :
-    base(tokenNode.Parent.RuleContext as ParserRuleContext) {
-    var token = tokenNode.Payload as IToken;
-    Text   = tokenNode.GetText();
-    Line   = token.Line;
-    Column = token.Column;
-    Width  = Text.Length;
-  }
+  public Modifier(ITerminalNode? tokenNode) :
+    base(tokenNode) {}
 }

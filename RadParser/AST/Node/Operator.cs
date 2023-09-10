@@ -10,18 +10,17 @@ public enum OperatorType {
   Minus
 }
 
-public class Operator : Node<INode> {
+/// <summary>
+///   Represents an operator in the source code. For example, in the line <c> var x = 5 + 5; </c>,
+///   <c> + </c> is an operator.
+/// </summary>
+/// <inheritdoc />
+public class Operator : TokenNode {
   public OperatorType Type { get; internal set; }
 
   public Operator(ParserRuleContext context) : base(context) {}
 
 
-  public Operator(ITerminalNode tokenNode) :
-    base(tokenNode.Parent.RuleContext as ParserRuleContext) {
-    var token = tokenNode.Payload as IToken;
-    Text   = tokenNode.GetText();
-    Line   = token.Line;
-    Column = token.Column;
-    Width  = Text.Length;
-  }
+  public Operator(ITerminalNode? tokenNode) :
+    base(tokenNode) {}
 }

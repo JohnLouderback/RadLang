@@ -258,7 +258,8 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override TypeReference VisitReturnTypeSpecifier(Rad.ReturnTypeSpecifierContext context) {
     // ReSharper disable once ConvertIfStatementToReturnStatement
-    if (context?.voidSpecifier() is not null) return new Void(context.voidSpecifier().VOID());
+    if (context?.voidSpecifier() is not null)
+      return new Void(context.voidSpecifier().VOID()) { Identifier = null };
 
     return VisitTypeSpecifier(context?.typeSpecifier());
   }
@@ -286,7 +287,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
                                  declCtx
                                ),
                              _ => throw new Exception(
-                                      $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                                      $"Top-level statement was not of a known context type. Got: {
+                                        child.GetType().Name
+                                      }"
                                     )
                            };
 
@@ -323,7 +326,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
             Rad.DefiniteStatementContext statementCtx => VisitDefiniteStatement(statementCtx),
             Rad.DeclarationContext declCtx            => VisitDeclaration(declCtx),
             _ => throw new Exception(
-                     $"Top-level statement was not of a known context type. Got: {child.GetType().Name}"
+                     $"Top-level statement was not of a known context type. Got: {
+                       child.GetType().Name
+                     }"
                    )
           };
 
@@ -339,7 +344,9 @@ public class ASTBuilderVisitor : RadBaseVisitor<INode> {
 
   public override TypeReference VisitTypeSpecifier(Rad.TypeSpecifierContext context) {
     if (context?.numberType() is not null) return VisitNumberType(context.numberType());
-    return new TypeReference(context?.ID());
+    return new TypeReference(context?.ID()) {
+      Identifier = new TypeIdentifier(context?.ID())
+    };
   }
 
 
