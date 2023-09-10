@@ -80,13 +80,14 @@ public class OptionsConverter<TOptions> : EnumConverter {
   /// <param name="destinationType"> The type to convert to. </param>
   /// <returns> The converted value. </returns>
   public override object ConvertTo(
-    ITypeDescriptorContext context,
-    CultureInfo culture,
-    object value,
+    ITypeDescriptorContext? context,
+    CultureInfo? culture,
+    object? value,
     Type destinationType
   ) {
     if (destinationType == typeof(string) &&
         value is TOptions) {
+      if (value == null) return "";
       // Convert the value to a string and lower case it. So "HelloWorld" becomes "helloworld".
       return ((TOptions)value).ToString().ToLower();
     }
