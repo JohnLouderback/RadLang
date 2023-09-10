@@ -1,9 +1,5 @@
 import * as path from 'path';
-import {
-  ExtensionContext,
-  window,
-  workspace,
-} from 'vscode';
+import { ExtensionContext, window, workspace } from 'vscode';
 import {
   CloseAction,
   ErrorAction,
@@ -31,7 +27,7 @@ export function activate(context: ExtensionContext) {
       'RadLanguageServerV2',
       'bin',
       'Debug',
-      'net7.0',
+      'net8.0',
       'RadLanguageServerV2.exe',
     ),
   );
