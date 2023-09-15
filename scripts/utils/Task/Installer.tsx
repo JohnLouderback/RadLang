@@ -11,6 +11,7 @@ import { Box, DOMElement, measureElement, useStdout } from 'ink';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
+import { useCliArgument } from '../../components/CLIArgumentContext.js';
 import useStdoutDimensions from '../../hooks/useStdoutDimensions.js';
 import { runAsyncFunctionsInOrder } from '../function-utils.js';
 import { CurrentTasks } from './CurrentTasks.js';
@@ -37,10 +38,13 @@ interface IInstallerProps {
  * Determines if the current environment is interactive. For example, if the current
  * environment is a TTY and not a CI environment, then it is interactive.
  */
-const isInteractive = process.stdout.isTTY && !process.env['CI'];
+const isTerminalInteractive = process.stdout.isTTY && !process.env['CI'];
 
 export const Installer: FC<IInstallerProps> = observer(
   ({ task: taskConstructor }) => {
+    const { cliArguments } = useCliArgument();
+    const isInteractive =
+      !cliArguments['non-interactive'] && isTerminalInteractive;
     const [columns, rows] = useStdoutDimensions();
     const outputRef = React.useRef<typeof Box>(null);
     const [outputHeight, setOutputHeight] = useState(0);
