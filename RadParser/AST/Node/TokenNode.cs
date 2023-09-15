@@ -34,7 +34,7 @@ public abstract class TokenNode : Node<INode> {
   ///   a <see cref="ParserRuleContext" />.
   /// </summary>
   /// <param name="context"> The <see cref="ParserRuleContext" /> to construct the node from. </param>
-  public TokenNode(ParserRuleContext context) : base(context) {}
+  protected TokenNode(ParserRuleContext context) : base(context) {}
 
 
   /// <summary>
@@ -43,7 +43,7 @@ public abstract class TokenNode : Node<INode> {
   /// <param name="tokenNode">
   ///   The <see cref="ITerminalNode" /> to construct the <see cref="TokenNode" /> from.
   /// </param>
-  public TokenNode(ITerminalNode? tokenNode) :
+  protected TokenNode(ITerminalNode? tokenNode) :
     base(tokenNode?.Parent?.RuleContext as ParserRuleContext) {
     if (tokenNode?.Payload is not IToken token) return;
     Text   = tokenNode.GetText();
