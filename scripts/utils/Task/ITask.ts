@@ -7,6 +7,7 @@ export enum TaskStatus {
   Pending,
   InProgress,
   Completed,
+  Skipped,
   Failed
 }
 
@@ -17,6 +18,18 @@ export interface ITaskBase {
   /** The name of the task. The may be any short and reasonable description. */
   name: string;
 
+  /**
+   * Indicates whether the task should be skipped. This is determined by the an optional
+   * function that may be provided in the constructor. If none is provided, the task will
+   * never be skipped.
+   */
+  shouldSkip(): boolean;
+
+  /**
+   * Forces the task to be skipped independent of the `shouldSkip` function.
+   */
+  skip(): void;
+
   /** The progress of the task. A number between `0` and `100`. */
   progress: number;
 
@@ -25,6 +38,9 @@ export interface ITaskBase {
 
   /** The parent task of this task. A task's parent is determined by the task that created it. */
   parent: Nullable<IParentTask>;
+
+  /** Executes the task. */
+  execute(): Promise<void>;
 
   /** A log of all the information pertinent to the actions this task has performed. */
   log: Array<string>;
@@ -57,6 +73,12 @@ export interface IExecutableTaskConstructor {
     setProgress: (progress: number) => void,
     log: (message: string) => void
   ): Promise<void>;
+
+  /**
+   * An option function that may be provided if there is a condition under which the task
+   * should be skipped.
+   */
+  shouldSkip?: (log: (message: string) => void) => boolean;
 }
 
 /**
@@ -74,6 +96,12 @@ export type IParentTask = ITaskBase & {
 export interface IParentTaskConstructor {
   /** The name of the task. The may be any short and reasonable description. */
   name: string;
+
+  /**
+   * An option function that may be provided if there is a condition under which the task
+   * should be skipped. For parent tasks, this will skip all subtasks.
+   */
+  shouldSkip?: (log: (message: string) => void) => boolean;
 
   /** A list of all the subtasks of this task. These may be either executable or parent tasks. */
   subTasks: ITaskConstructor[];

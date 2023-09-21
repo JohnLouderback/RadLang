@@ -25,6 +25,8 @@ const getTaskStateStringFromTask = (
       return 'success';
     case TaskStatus.Failed:
       return 'error';
+    case TaskStatus.Skipped:
+      return 'warning';
     default:
       throw new Error(`Unknown task status: ${status}`);
   }
@@ -48,6 +50,7 @@ export const TaskTree: FC<ITaskListProps> = observer(({ task }) => {
         'subTasks' in task &&
         !!task.subTasks.length &&
         (task.status === TaskStatus.InProgress ||
+          task.status === TaskStatus.Skipped ||
           task.status === TaskStatus.Completed)
       }
       state={taskState}

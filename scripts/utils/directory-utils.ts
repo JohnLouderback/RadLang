@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,3 +16,12 @@ export const monorepoRoot = path.resolve(__dirname, '../../');
  * we don't want to include Emscripten in the final output.
  */
 export const supportDir = path.resolve(monorepoRoot, '.support/');
+
+/**
+ * Checks if the given directory is empty.
+ * @param dir - The directory to check.
+ * @returns Whether or not the directory is empty.
+ */
+export const isDirEmpty = (dir: string) => {
+  return fs.readdirSync(dir).length === 0;
+};

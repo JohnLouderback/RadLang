@@ -13,7 +13,6 @@ import { observer } from 'mobx-react-lite';
 
 import { useCliArgument } from '../../components/CLIArgumentContext.js';
 import useStdoutDimensions from '../../hooks/useStdoutDimensions.js';
-import { runAsyncFunctionsInOrder } from '../function-utils.js';
 import { CurrentTasks } from './CurrentTasks.js';
 import { ExecutableTask } from './ExecutorTask.js';
 import { ITaskConstructor } from './ITask.js';
@@ -71,15 +70,7 @@ export const Installer: FC<IInstallerProps> = observer(
     useEffect(() => {
       // Run all the tasks in order. If the task is a parent task, then run all the
       // subtasks in order.
-      if (task instanceof ParentTask) {
-        runAsyncFunctionsInOrder(
-          task.executors.map((task) => [task.execute, task])
-        );
-      }
-      // Otherwise, if the task is an executable task, then run the task.
-      else if (task instanceof ExecutableTask) {
-        task.execute();
-      }
+      task.execute();
 
       // When the last message to be logged changes, update the last message. In
       // non-interactive terminals (e.g. CI environments), this will be used to render the

@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { Nullable } from '../type-utils.js';
 import { ExecutableTask } from './ExecutorTask.js';
@@ -15,6 +15,13 @@ import {
 export class ParentTask implements IParentTask {
   /** @inheritdoc */
   public readonly name: string;
+
+  @observable
+  private _shouldSkip: Nullable<(log: (message: string) => void) => boolean>;
+
+  @observable
+  private _status: Nullable<TaskStatus> = null;
+
   @observable private _log: Array<string> = [];
 
   /** @inheritdoc */
@@ -44,6 +51,11 @@ export class ParentTask implements IParentTask {
 
   /** @inheritdoc */
   @computed public get status() {
+    // If the status has been hard-set, return it.
+    if (this._status) {
+      return this._status;
+    }
+
     // If any of the subtasks are in progress, this task is in progress.
     if (
       this.subTasks.some((subTask) => subTask.status === TaskStatus.InProgress)
@@ -61,6 +73,12 @@ export class ParentTask implements IParentTask {
       this.subTasks.every((subTask) => subTask.status === TaskStatus.Pending)
     ) {
       return TaskStatus.Pending;
+    }
+    // If all tasks were skipped, this task was skipped.
+    else if (
+      this.subTasks.every((subTask) => subTask.status === TaskStatus.Skipped)
+    ) {
+      return TaskStatus.Skipped;
     }
     // If all of the subtasks are completed, this task is completed.
     else if (
@@ -135,6 +153,7 @@ export class ParentTask implements IParentTask {
     makeObservable(this);
     this.name = constructorTask.name;
     this.parent = parent ?? null;
+    this._shouldSkip = constructorTask.shouldSkip ?? null;
     this.subTasks = constructorTask.subTasks.map((task) => {
       // If the task is a parent task, create a new parent task.
       if ('subTasks' in task) {
@@ -145,5 +164,41 @@ export class ParentTask implements IParentTask {
         return new ExecutableTask(task, this);
       }
     });
+  }
+  /**
+   * Executes this task, running its subtasks.
+   */
+  @action public async execute(): Promise<void> {
+    if (this.shouldSkip()) {
+      this.skip();
+      return;
+    }
+
+    // Execute each subtask in order.
+    for (const subTask of this.subTasks) {
+      await subTask.execute();
+    }
+  }
+
+  private logMessage(message: string): void {
+    this.log.push(message);
+  }
+
+  /** @inheritdoc */
+  public shouldSkip(): boolean {
+    if (this._shouldSkip) {
+      return this._shouldSkip(this.logMessage.bind(this));
+    }
+    return false;
+  }
+
+  /**
+   * Skips this task and all of its subtasks independently of their skip conditions.
+   */
+  @action public skip() {
+    this._status = TaskStatus.Skipped;
+    for (const subTask of this.subTasks) {
+      subTask.skip();
+    }
   }
 }

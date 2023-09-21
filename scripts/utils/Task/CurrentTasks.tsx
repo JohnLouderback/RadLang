@@ -56,7 +56,9 @@ export const CurrentTasks: FC<ICurrentTasksProps> = observer(({ task }) => {
           <Text> {task.name}</Text>
           <Text>
             {task.status === TaskStatus.Completed
-              ? ': ' + 'Complete!'
+              ? ': Complete!'
+              : task.status === TaskStatus.Skipped
+              ? ': Skipped!'
               : ' - ' + Math.ceil(task.progress) + '%'}
           </Text>
         </Box>

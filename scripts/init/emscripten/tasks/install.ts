@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import path from 'path';
 
 import * as Tween from '@tweenjs/tween.js';
@@ -7,7 +8,7 @@ import {
   emSDKDir,
   emVersion
 } from '../../../utils/constants.js';
-import { supportDir } from '../../../utils/directory-utils.js';
+import { isDirEmpty, supportDir } from '../../../utils/directory-utils.js';
 import {
   downloadFile,
   extractZipFile,
@@ -20,17 +21,41 @@ import { ITaskConstructor } from '../../../utils/Task/ITask.js';
 import { ProgressUpdater } from '../../../utils/Task/ProgressUpdater.js';
 import { activateEmscriptenTask } from './activate.js';
 
+/** The path to Emscripten SDK in the support directory. */
 const emSDKInstallScript = path.resolve(
   emSDKDir,
   './emsdk' + (isWindows() ? '.bat' : '')
 );
 
+/** The path to the downloaded Emscripten SDK zip file. */
+const emSDKZip = path.resolve(supportDir, 'emsdk.zip');
+
 /** A task which defines the steps needed to install Emscripten. */
 export const installEmscriptenTask = {
   name: 'Installing Emscripten',
+  shouldSkip: (log) => {
+    // If the emsdk directory exists and is not empty, we can skip this task. We'll assume
+    // that if the directory exists, it's already been installed.
+    if (existsSync(emSDKDir) && !isDirEmpty(emSDKDir)) {
+      log('Emscripten SDK is already installed. Skipping installation.');
+      return true;
+    }
+    return false;
+  },
   subTasks: [
     {
       name: 'Downloading Emscripten',
+      shouldSkip: (log) => {
+        // If the emsdk zip file exists, we can skip this task. We'll assume that if the zip
+        // file exists, it's already been downloaded.
+        if (existsSync(emSDKZip)) {
+          log(
+            'Emscripten SDK is already downloaded. Skipping download of `emsdk.zip`.'
+          );
+          return true;
+        }
+        return false;
+      },
       async executor(setProgress, log) {
         await downloadFile(
           'https://github.com/emscripten-core/emsdk/archive/refs/heads/main.zip',
@@ -43,10 +68,18 @@ export const installEmscriptenTask = {
     },
     {
       name: 'Extracting Emscripten',
+      shouldSkip: (log) => {
+        // If the emsdk directory exists and is not empty, we can skip this task. We'll assume
+        // that if the directory exists, it's already been installed.
+        if (existsSync(emSDKDir) && !isDirEmpty(emSDKDir)) {
+          log(
+            'Emscripten SDK is already extracted. Skipping extraction of zip file.'
+          );
+          return true;
+        }
+        return false;
+      },
       async executor(setProgress, log) {
-        const emSDKZip = path.resolve(supportDir, 'emsdk.zip');
-        const emSDKDir = path.resolve(supportDir, 'emsdk');
-
         log('Giving user permissions to extract the zip file.');
         await givePermissionsToFile(emSDKZip);
 

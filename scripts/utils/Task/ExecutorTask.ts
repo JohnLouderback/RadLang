@@ -12,6 +12,8 @@ import {
  * Represents a task that executes some action.
  */
 export class ExecutableTask implements IExecutableTask {
+  private _shouldSkip: Nullable<(log: (message: string) => void) => boolean>;
+
   @observable private _log: Array<string> = [];
 
   /** @inheritdoc */
@@ -66,6 +68,7 @@ export class ExecutableTask implements IExecutableTask {
     parent?: IParentTask
   ) {
     makeObservable(this);
+    this._shouldSkip = constructorTask.shouldSkip ?? null;
     this.name = constructorTask.name;
     this.parent = parent ?? null;
     this._log = [...(constructorTask.log ?? [])];
@@ -76,6 +79,10 @@ export class ExecutableTask implements IExecutableTask {
    * Executes this task, running its executor function.
    */
   @action public async execute(): Promise<void> {
+    if (this.shouldSkip()) {
+      this.skip();
+      return;
+    }
     this._status = TaskStatus.InProgress;
     this.log.push(this.name);
     await this.executor(
@@ -92,5 +99,19 @@ export class ExecutableTask implements IExecutableTask {
 
   private logMessage(message: string): void {
     this.log.push(message);
+  }
+
+  /** @inheritdoc */
+  shouldSkip(): boolean {
+    if (this._shouldSkip) {
+      return this._shouldSkip(this.logMessage.bind(this));
+    }
+    return false;
+  }
+
+  /** @inheritdoc */
+  @action public skip() {
+    this._status = TaskStatus.Skipped;
+    this._progress = 100;
   }
 }

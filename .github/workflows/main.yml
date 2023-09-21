@@ -36,6 +36,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set Up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+
+      - name: Install Node modules
+        run: yarn install --frozen-lockfile
+
+      - name: Cache Support Files # Cache the support files for faster builds.
+        uses: actions/cache@v3
+        with:
+          # Create a key based on the hash of the init scripts. If those change, we want to invalidate the cache.
+          key: support-files-${{ matrix.os }}-${{ hashFiles('scripts/init/**') }}
+          path: |
+            ./.support/
+
+      # Setup repo with automated initialization scripts.
+      - name: Init Repository
+        run: yarn repo init -n
+
       - name: Install CMake
         if: matrix.os != 'windows-latest' # Use the bundled CMake for Visual Studio on Windows.
         uses: lukka/get-cmake@v3.25.2
@@ -69,10 +90,6 @@ jobs:
           cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-windows-x64/ -G "Visual Studio 17 2022" -T v143
           cmake --build cmake-build-windows-x64/ --target RadLib RadLibStatic --config Release
           cd ../
-
-      # Setup Emscripten so we can build the WebAssembly version of the library.
-      - name: Setup emsdk
-        run: yarn repo init -n
 
       # Ensure that the Emscripten environment is set up correctly.
       - name: Verify
