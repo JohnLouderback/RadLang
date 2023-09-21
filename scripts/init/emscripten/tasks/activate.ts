@@ -15,6 +15,7 @@ export const activateEmscriptenTask = {
   async executor(setProgress, log) {
     const emSDKActivateScript = path.resolve(
       emSDKDir,
+      './emsdk-main',
       './emsdk' + (isWindows() ? '.bat' : '')
     );
 

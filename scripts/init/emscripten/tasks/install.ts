@@ -24,6 +24,7 @@ import { activateEmscriptenTask } from './activate.js';
 /** The path to Emscripten SDK in the support directory. */
 const emSDKInstallScript = path.resolve(
   emSDKDir,
+  './emsdk-main',
   './emsdk' + (isWindows() ? '.bat' : '')
 );
 
@@ -39,6 +40,10 @@ export const installEmscriptenTask = {
     if (existsSync(emSDKDir) && !isDirEmpty(emSDKDir)) {
       log('Emscripten SDK is already installed. Skipping installation.');
       return true;
+    }
+    // If the emsdk directory does not exist, create it.
+    else if (!existsSync(emSDKDir)) {
+      makeDirectory(emSDKDir);
     }
     return false;
   },

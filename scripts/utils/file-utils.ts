@@ -155,7 +155,8 @@ export const makeDirectory = (dirPath: string): void => {
   // OR
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, {
-      mode: 0o744 // Not supported on Windows. Default: 0o777
+      mode: 0o744, // Not supported on Windows. Default: 0o777
+      recursive: true
     });
   }
 };
