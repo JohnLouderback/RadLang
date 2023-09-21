@@ -91,9 +91,21 @@ jobs:
           cmake --build cmake-build-windows-x64/ --target RadLib RadLibStatic --config Release
           cd ../
 
-      # Ensure that the Emscripten environment is set up correctly.
-      - name: Verify
-        run: emcc -v
+      # Activate Emscripten in Unix-like environments.
+      - name: Activate Emscripten Unix-like
+        if: matrix.os != 'windows-latest'
+        run: |
+          ./.support/emsdk/emsdk-main/emsdk-main/emsdk activate --permanent
+          source "/home/runner/work/RadLang/RadLang/.support/emsdk/emsdk-main/emsdk-main/emsdk_env.sh"
+
+      # Activate Emscripten in Windows environments.
+      - name: Activate Emscripten Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          "./.support/emsdk/emsdk-main/emsdk-main/emsdk.bat" activate --permanent
+
+      - name: Verify EMCC
+        run: emcc --version
 
       # Build the Emscripten version of the library.
       - name: Build C project Emscripten
