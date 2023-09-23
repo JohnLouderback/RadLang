@@ -9,6 +9,7 @@ env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
   DOTNET_VERSION: 8.0.0-preview.3 # Using a preview version for maximum adventure.
+  EM_BIN_DIR: .support/emsdk/emsdk-main/emsdk-main/upstream/emscripten/
 
 jobs:
   build-project:
@@ -20,8 +21,10 @@ jobs:
         include:
           - os: windows-latest
             rid: win-x64
+            em-file-ext: .bat
           - os: macos-latest
             rid: osx-x64
+            em-file-ext: ''
           # We need the specific version on Ubuntu because the native `libLLVM` cannot
           # otherwise be determined. If we used `linux-x64` instead, llvmSharp would have
           # no way to determine which distro's `libLLVM` to use. Ubuntu 18.04 should
@@ -31,6 +34,7 @@ jobs:
           # for other architectures and considerataions like `musl`.
           - os: ubuntu-latest
             rid: ubuntu.18.04-x64
+            em-file-ext: ''
 
     steps:
       - name: Checkout code
@@ -105,13 +109,13 @@ jobs:
           "./.support/emsdk/emsdk-main/emsdk-main/emsdk.bat" activate --permanent
 
       - name: Verify EMCC
-        run: emcc --version
+        run: ${{ env.EM_BIN_DIR }}emcc${{ matrix.em-file-ext }} --version
 
       # Build the Emscripten version of the library.
       - name: Build C project Emscripten
         run: |
           cd ./RadLib
-          emcmake cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-emscripten/
+          ../${{ env.EM_BIN_DIR }}emcmake${{ matrix.em-file-ext }} cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-emscripten/
           cmake --build cmake-build-unix/ --target RadLibStatic --config Release
           cd ../
 
