@@ -100,7 +100,7 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           ./.support/emsdk/emsdk-main/emsdk-main/emsdk activate --permanent
-          source "/home/runner/work/RadLang/RadLang/.support/emsdk/emsdk-main/emsdk-main/emsdk_env.sh"
+          source "./.support/emsdk/emsdk-main/emsdk-main/emsdk_env.sh"
 
       # Activate Emscripten in Windows environments.
       - name: Activate Emscripten Windows
