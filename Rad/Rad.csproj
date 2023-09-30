@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <UseRidGraph>true</UseRidGraph>
+        <!-- ⇧ Deprecated, but needed to support finding the correct LLVM libs per platform. -->
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -11,60 +13,80 @@
         <ApplicationIcon>rad-icon.ico</ApplicationIcon>
         <LangVersion>10</LangVersion>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-        <!--<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>-->
+        <!-- <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies> -->
         <PublishSingleFile>true</PublishSingleFile>
         <TrimMode>partial</TrimMode>
-        <!--<PublishAot>true</PublishAot>-->
+        <!-- <PublishAot>true</PublishAot> -->
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Spectre.Console" Version="0.46.1-preview.0.20" />
-        <PackageReference Include="Spectre.Console.Analyzer" Version="0.46.1-preview.0.20">
+        <PackageReference Include="Spectre.Console"
+                          Version="0.46.1-preview.0.20" />
+        <PackageReference Include="Spectre.Console.Analyzer"
+                          Version="0.46.1-preview.0.20">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Spectre.Console.Cli" Version="0.46.1-preview.0.20" />
-        <PackageReference Include="Spectre.Console.Extensions.Progress" Version="1.0.0" />
-        <PackageReference Include="Spectre.Console.Extensions.Table" Version="1.0.0" />
-        <PackageReference Include="Spectre.Console.ImageSharp" Version="0.46.1-preview.0.20" />
+        <PackageReference Include="Spectre.Console.Cli"
+                          Version="0.46.1-preview.0.20" />
+        <PackageReference Include="Spectre.Console.Extensions.Progress"
+                          Version="1.0.0" />
+        <PackageReference Include="Spectre.Console.Extensions.Table"
+                          Version="1.0.0" />
+        <PackageReference Include="Spectre.Console.ImageSharp"
+                          Version="0.46.1-preview.0.20" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\RadInterpreter\RadInterpreter.csproj" />
         <ProjectReference Include="..\RadProject\RadProject.csproj" />
     </ItemGroup>
-
-    <!--    <ItemGroup>-->
-    <!--        <RdXmlFile Include="RD.xml"/>-->
-    <!--    </ItemGroup>-->
-
+    <!-- <ItemGroup> -->
+    <!-- <RdXmlFile Include="RD.xml"/> -->
+    <!-- </ItemGroup> -->
     <!-- Configure the deployment paths for copying the runtime support DLLs. -->
     <ItemGroup>
         <DeployPath Include="$(OutDir)" />
-        <DeployPath Condition="'$(PublishDir)' != ''" Include="$(PublishDir)" />
+        <DeployPath Condition="'$(PublishDir)' != ''"
+                    Include="$(PublishDir)" />
     </ItemGroup>
-
-    <!-- 
-        Copy the correct runtime support DLLs to the output directory, depending on the target platform. There should be
-        both a dynamic and a static library for each platform. The dynamic library is used for runtime linking, and the 
-        static library is used for AOT compilation. To that end, the we'll use the dynamic library in cases where we're 
-        running the problem in a JIT environment, like during development, whereas we'll use the static library when 
+    <!-- Copy the correct runtime support DLLs to the output directory, depending on the target platform. There should be
+        both a dynamic and a static library for each platform. The dynamic library is used for runtime linking, and the
+        static library is used for AOT compilation. To that end, the we'll use the dynamic library in cases where we're
+        running the problem in a JIT environment, like during development, whereas we'll use the static library when
         we're compiling the end-user's code in an AOT environment to produce a binary. The runtime library, in general,
         is used to support certain primitive operations of the language's standard library, like printing to the console,
-        reading from the console, timers, etc.
-    -->
-    <Target Name="Copy Runtime DLLs" AfterTargets="Build;AfterPublish" Outputs="%(DeployPath.Identity)">
+        reading from the console, timers, etc. -->
+    <Target Name="Copy Runtime DLLs"
+            AfterTargets="Build;AfterPublish"
+            Outputs="%(DeployPath.Identity)">
         <PropertyGroup>
             <OutputDir>%(DeployPath.Identity)</OutputDir>
         </PropertyGroup>
-        <Message Text="Copying Runtime Support DLLs" Importance="High" />
+        <Message Text="Copying Runtime Support DLLs"
+                 Importance="High" />
         <!-- If we're on Linux copy the `libRadLib.so` runtime dynamic library file. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so" DestinationFolder="$(OutputDir)" SkipUnchangedFiles="false" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' " />
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.so"
+              DestinationFolder="$(OutputDir)"
+              SkipUnchangedFiles="false"
+              Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' " />
         <!-- If we're on macOS copy the `libRadLib.dylib` runtime dynamic library file. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.dylib" DestinationFolder="$(OutputDir)" SkipUnchangedFiles="false" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' " />
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLib.dylib"
+              DestinationFolder="$(OutputDir)"
+              SkipUnchangedFiles="false"
+              Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' " />
         <!-- If we're on a Unix-like system (Mac or Linux, for instance) copy the `libRadLibStatic.a` runtime static library file. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a" DestinationFolder="$(OutputDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Unix'" />
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-unix\libRadLibStatic.a"
+              DestinationFolder="$(OutputDir)"
+              SkipUnchangedFiles="false"
+              Condition="'$(OS)' == 'Unix'" />
         <!-- If we're on Windows copy the `RadLib.dll` runtime dynamic library file. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll" DestinationFolder="$(OutputDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'" />
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLib.dll"
+              DestinationFolder="$(OutputDir)"
+              SkipUnchangedFiles="false"
+              Condition="'$(OS)' == 'Windows_NT'" />
         <!-- If we're on Windows copy the `RadLibStatic.lib` runtime static library file. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib" DestinationFolder="$(OutputDir)" SkipUnchangedFiles="false" Condition="'$(OS)' == 'Windows_NT'" />
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-windows-x64\$(Configuration)\RadLibStatic.lib"
+              DestinationFolder="$(OutputDir)"
+              SkipUnchangedFiles="false"
+              Condition="'$(OS)' == 'Windows_NT'" />
     </Target>
 </Project>

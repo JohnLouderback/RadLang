@@ -1,29 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <ApplicationIcon>rad-icon.ico</ApplicationIcon>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DryIoc" Version="5.3.1" />
-    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Protocol" Version="17.2.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
-    <PackageReference Include="StreamJsonRpc" Version="2.12.27" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Test.cs" />
-    <None Include="Test.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
-    <ProjectReference Include="..\RadParser\RadParser.csproj" />
-    <ProjectReference Include="..\RadTypeChecker\RadTypeChecker.csproj" />
-  </ItemGroup>
-
+    <PropertyGroup>
+        <UseRidGraph>true</UseRidGraph>
+        <!-- ⇧ Deprecated, but needed to support finding the correct LLVM libs per platform. -->
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <ApplicationIcon>rad-icon.ico</ApplicationIcon>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="DryIoc"
+                          Version="5.3.1" />
+        <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Protocol"
+                          Version="17.2.8" />
+        <PackageReference Include="Newtonsoft.Json"
+                          Version="13.0.2-beta2" />
+        <PackageReference Include="StreamJsonRpc"
+                          Version="2.12.27" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Test.cs" />
+        <None Include="Test.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
+        <ProjectReference Include="..\RadParser\RadParser.csproj" />
+        <ProjectReference Include="..\RadTypeChecker\RadTypeChecker.csproj" />
+    </ItemGroup>
 </Project>

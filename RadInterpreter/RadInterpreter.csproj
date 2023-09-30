@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
+        <UseRidGraph>true</UseRidGraph>
+        <!-- ⇧ Deprecated, but needed to support finding the correct LLVM libs per platform. -->
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -8,21 +9,17 @@
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
         <LangVersion>11</LangVersion>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
-
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\RadCompiler\RadCompiler.csproj" />
         <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
         <ProjectReference Include="..\RadParser\RadParser.csproj" />
     </ItemGroup>
-
 </Project>

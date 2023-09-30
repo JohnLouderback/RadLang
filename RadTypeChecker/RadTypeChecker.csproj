@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RadDiagnostics\RadDiagnostics.csproj" />
-    <ProjectReference Include="..\RadParser\RadParser.csproj" />
-    <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
-  </ItemGroup>
-
+    <PropertyGroup>
+        <UseRidGraph>true</UseRidGraph>
+        <!-- ⇧ Deprecated, but needed to support finding the correct LLVM libs per platform. -->
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RadDiagnostics\RadDiagnostics.csproj" />
+        <ProjectReference Include="..\RadParser\RadParser.csproj" />
+        <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
+    </ItemGroup>
 </Project>

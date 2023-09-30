@@ -1,29 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
+        <UseRidGraph>true</UseRidGraph>
+        <!-- ⇧ Deprecated, but needed to support finding the correct LLVM libs per platform. -->
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11</LangVersion>
     </PropertyGroup>
-
     <ItemGroup>
-        <ProjectReference Include="..\RadLexer\RadLexer.csproj"/>
-        <ProjectReference Include="..\RadUtils\RadUtils.csproj"/>
+        <ProjectReference Include="..\RadLexer\RadLexer.csproj" />
+        <ProjectReference Include="..\RadUtils\RadUtils.csproj" />
     </ItemGroup>
-
     <ItemGroup>
-        <PackageReference Include="OneOf" Version="3.0.223"/>
-        <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223"/>
+        <PackageReference Include="OneOf"
+                          Version="3.0.223" />
+        <PackageReference Include="OneOf.SourceGenerator"
+                          Version="3.0.223" />
     </ItemGroup>
-
     <ItemGroup>
         <None Update="IBaseASTVisitor.tt">
             <Generator>TextTemplatingFileGenerator</Generator>
             <LastGenOutput>IBaseASTVisitor.g.cs</LastGenOutput>
         </None>
     </ItemGroup>
-
     <ItemGroup>
         <Compile Update="IBaseASTVisitor.g.cs">
             <AutoGen>True</AutoGen>
@@ -31,5 +30,4 @@
             <DependentUpon>IBaseASTVisitor.tt</DependentUpon>
         </Compile>
     </ItemGroup>
-
 </Project>
