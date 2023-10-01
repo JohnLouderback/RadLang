@@ -111,6 +111,12 @@ jobs:
       - name: Verify EMCC
         run: ${{ env.EM_BIN_DIR }}emcc${{ matrix.em-file-ext }} --version
 
+      - name: Install and Activate MinGW for Emscripten (Windows)
+        if: matrix.os == 'windows-latest' # Windows won't already have MinGW installed.
+        run: |
+          ./.support/emsdk/emsdk-main/emsdk-main/emsdk install mingw-7.1.0-64bit
+          ./.support/emsdk/emsdk-main/emsdk-main/emsdk activate mingw-7.1.0-64bit
+
       # Build the Emscripten version of the library.
       - name: Build C project Emscripten
         run: |
