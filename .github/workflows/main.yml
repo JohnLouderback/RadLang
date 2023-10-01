@@ -116,7 +116,7 @@ jobs:
         run: |
           cd ./RadLib
           ../${{ env.EM_BIN_DIR }}emcmake${{ matrix.em-file-ext }} cmake -DBUILDING_DLL=1 -DCMAKE_BUILD_TYPE=Release -Bcmake-build-emscripten/
-          cmake --build cmake-build-unix/ --target RadLibStatic --config Release
+          cmake --build cmake-build-emscripten/ --target RadLibStatic --config Release
           cd ../
 
       - name: Setup .NET Core SDK
