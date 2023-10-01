@@ -79,7 +79,7 @@ jobs:
       #  if: matrix.os == 'windows-latest'
       #  uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build C project Unix-like
+      - name: Build C project (Unix-like)
         if: matrix.os != 'windows-latest'
         run: |
           cd ./RadLib
@@ -87,7 +87,7 @@ jobs:
           cmake --build cmake-build-unix/ --target RadLib RadLibStatic --config Release
           cd ../
 
-      - name: Build C project Windows
+      - name: Build C project (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           cd ./RadLib
@@ -96,14 +96,14 @@ jobs:
           cd ../
 
       # Activate Emscripten in Unix-like environments.
-      - name: Activate Emscripten Unix-like
+      - name: Activate Emscripten (Unix-like)
         if: matrix.os != 'windows-latest'
         run: |
           ./.support/emsdk/emsdk-main/emsdk-main/emsdk activate --permanent
           source "./.support/emsdk/emsdk-main/emsdk-main/emsdk_env.sh"
 
       # Activate Emscripten in Windows environments.
-      - name: Activate Emscripten Windows
+      - name: Activate Emscripten (Windows)
         if: matrix.os == 'windows-latest'
         run: |
           ./.support/emsdk/emsdk-main/emsdk-main/emsdk.bat activate --permanent
