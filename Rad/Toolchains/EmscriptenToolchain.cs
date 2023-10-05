@@ -135,7 +135,8 @@ public class EmscriptenToolchain : IBuildableToolchain<string, string>, IActivat
     // Get the emscripten directory. 
     var emscriptenDir = DirectoryUtils.MakeAbsolutePath("./emsdk/emsdk-main");
     // Get the path to the static runtime library for linking with the IR file.
-    var staticRuntimeLibrary = DirectoryUtils.MakeAbsolutePath("./libRadStaticLib.a");
+    var staticRuntimeLibrary =
+      DirectoryUtils.MakeAbsolutePath("./libs/toolchains/emcc/libRadLib.a");
 
     // Get the file extension for running any binaries. This is empty on Unix-like systems and
     // ".bat" on Windows. This is because on Unix-like systems, we can run binaries directly, but on
@@ -151,13 +152,10 @@ public class EmscriptenToolchain : IBuildableToolchain<string, string>, IActivat
         Path.Combine(emscriptenDir, $"./upstream/emscripten/emcc{binExtension}")
       );
 
-    // Get the path to the static Rad runtime library for Emscripten for linking with the IR file.
-    var libRad = DirectoryUtils.MakeAbsolutePath("./libRadLib.a");
-
     Logging.Info($"Running emcc at \"{emccPath}\".");
     var emccResult = await ProcessUtils.RunCommandAsync(
                          emccPath,
-                         $"-s {pathToIRFile} {libRad} -o {Path.GetFileNameWithoutExtension(pathToIRFile)}.html",
+                         $"-s {pathToIRFile} {staticRuntimeLibrary} -o {Path.GetFileNameWithoutExtension(pathToIRFile)}.html",
                          false,
                          false,
                          Path.GetDirectoryName(pathToIRFile)
