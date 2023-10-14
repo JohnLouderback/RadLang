@@ -15,7 +15,7 @@ import { useCliArgument } from '../../components/CLIArgumentContext.js';
 import useStdoutDimensions from '../../hooks/useStdoutDimensions.js';
 import { CurrentTasks } from './CurrentTasks.js';
 import { ExecutableTask } from './ExecutorTask.js';
-import { ITaskConstructor } from './ITask.js';
+import { ITaskConstructor, TaskStatus } from './ITask.js';
 import { ParentTask } from './ParentTask.js';
 import { TaskLog } from './TaskLog.js';
 import { TaskTree } from './TaskTree.js';
@@ -44,7 +44,15 @@ export const Installer: FC<IInstallerProps> = observer(
     const { cliArguments } = useCliArgument();
     const isInteractive =
       !cliArguments['non-interactive'] && isTerminalInteractive;
-    const [columns, rows] = useStdoutDimensions();
+    const consoleDimensions = useStdoutDimensions();
+    const [columns] = consoleDimensions;
+
+    // Subtracting 1 from the maximum number of rows is import in certain environments
+    // like PowerShell because (for reasons beyond my comprehension) the terminal will
+    // flicker and constantly output every frame of rendering to the terminal in sequence.
+    // However, if the height is 1 less than the maximum, then this does not happen.
+    const rows = consoleDimensions[1] - 1;
+
     const outputRef = React.useRef<typeof Box>(null);
     const [outputHeight, setOutputHeight] = useState(0);
     const [outputWidth, setOutputWidth] = useState(0);
@@ -101,6 +109,16 @@ export const Installer: FC<IInstallerProps> = observer(
       updateLogSizes();
     });
 
+    /**
+     * The number of in-progress tasks. This is used to determine the height of the
+     * the log output container to ensure it leaves enough room for the progress bars.
+     */
+    const numberOfInProgressTasks =
+      (task instanceof ParentTask &&
+        task.allTasks.filter((task) => task.status === TaskStatus.InProgress)
+          .length) ||
+      0;
+
     // If the terminal is not interactive, then don't render anything. We'll just log the
     // last message to the terminal using the `useStdout` hook above.
     return !isInteractive ? null : (
@@ -118,11 +136,14 @@ export const Installer: FC<IInstallerProps> = observer(
               // Subtract 2 from the height to account for the border. Then if the top-level
               // task is not a parent task, subtract 1 more for the task name. Otherwise, if
               // it is a parent task, subtract the number of all tasks from the height. This
-              // guarantees enough room for the current task list.
+              // guarantees enough room for the current task list. If there are no
+              // in-progress tasks, then the height is 100%.
               height={
-                rows -
-                2 -
-                (task instanceof ParentTask ? task.allTasks.length : 1)
+                numberOfInProgressTasks > 0
+                  ? rows -
+                    2 -
+                    (task instanceof ParentTask ? numberOfInProgressTasks : -1)
+                  : '100%'
               }
               width="75%"
             >
@@ -137,16 +158,24 @@ export const Installer: FC<IInstallerProps> = observer(
               <TaskTree task={task} />
             </Box>
           </Box>
-          <Box
-            borderStyle="round"
-            borderColor="green"
-            flexGrow={1}
-            flexShrink={1}
-            alignItems="flex-start"
-            justifyContent="flex-start"
-          >
-            <CurrentTasks task={task} />
-          </Box>
+          {
+            /* If there are any in-progress tasks, show the progress bars for those tasks. */
+            task instanceof ParentTask &&
+            task.allTasks.some(
+              (task) => task.status === TaskStatus.InProgress
+            ) ? (
+              <Box
+                borderStyle="round"
+                borderColor="green"
+                flexGrow={1}
+                flexShrink={1}
+                alignItems="flex-start"
+                justifyContent="flex-start"
+              >
+                <CurrentTasks task={task} />
+              </Box>
+            ) : null
+          }
         </Box>
       </>
     );

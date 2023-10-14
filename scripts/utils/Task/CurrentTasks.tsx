@@ -17,8 +17,8 @@ interface ICurrentTasksProps {
 const getInProgressTasks = (task: ITask): ITask[] => {
   const tasks: Array<ITask | Array<ITask>> = [];
   if (
-    task.status === TaskStatus.InProgress ||
-    task.status === TaskStatus.Completed
+    task.status === TaskStatus.InProgress /* ||
+    task.status === TaskStatus.Completed */
   ) {
     tasks.push(task);
   }
@@ -44,9 +44,10 @@ const getInProgressTasks = (task: ITask): ITask[] => {
 };
 
 export const CurrentTasks: FC<ICurrentTasksProps> = observer(({ task }) => {
-  return (
+  const inProgressTasks = getInProgressTasks(task);
+  return inProgressTasks.length > 0 ? (
     <Box flexDirection="column">
-      {getInProgressTasks(task).map((task) => (
+      {inProgressTasks.map((task) => (
         <Box flexDirection="row" flexGrow={1}>
           <Box width={30}>
             <ProgressBar
@@ -64,5 +65,5 @@ export const CurrentTasks: FC<ICurrentTasksProps> = observer(({ task }) => {
         </Box>
       ))}
     </Box>
-  );
+  ) : null;
 });
