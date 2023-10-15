@@ -88,7 +88,7 @@
         <!-- Make a directory for the runtime libraries generated specifically for Emscripten. -->
         <MakeDir Directories="$(OutputDir)/libs/toolchains/emcc/"/>
         <!-- Copy the `libRadLib.a` runtime static library for Emscripten. -->
-        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-emscripten\libRadLib.a"
+        <Copy SourceFiles="$(SolutionDir)RadLib\cmake-build-emscripten\libRadLibStatic.a"
               DestinationFolder="$(OutputDir)/libs/toolchains/emcc/"
               SkipUnchangedFiles="false"/>
     </Target>
